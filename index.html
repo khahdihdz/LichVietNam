@@ -50,6 +50,8 @@ header h1{font-size:16px;margin:0;letter-spacing:.3px;}
 .navmenu button.active{background:var(--accent);color:#fff;}
 .navmenu button:not(:last-child){border-bottom:1px solid var(--line);}
 .themebtn{background:none;border:none;font-size:18px;cursor:pointer;}
+.installbtn{display:none;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;}
+.installbtn.show{display:inline-flex;align-items:center;gap:5px;}
 main{max-width:720px;margin:0 auto;padding:14px;}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
 .hero{text-align:center;}
@@ -116,6 +118,7 @@ footer a:hover{text-decoration:underline;}
         <button data-v="holidays" role="menuitem">🎉 Ngày lễ</button>
       </div>
     </div>
+    <button class="installbtn" id="installBtn" type="button" title="Cài đặt Lịch Việt Nam">📲 Cài đặt</button>
     <button class="themebtn" id="themeBtn" title="Đổi giao diện">🌙</button>
   </div>
 </header>
@@ -487,6 +490,24 @@ navMenu.addEventListener('click',e=>{
   view=b.dataset.v; renderApp(); closeMenu();
 });
 document.addEventListener('click',()=>closeMenu());
+let deferredInstallPrompt=null;
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  installBtn.classList.add('show');
+});
+installBtn.addEventListener('click',async()=>{
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;
+  installBtn.classList.remove('show');
+});
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  installBtn.classList.remove('show');
+});
 const themeBtn=document.getElementById('themeBtn');
 function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); themeBtn.textContent=t==='dark'?'☀️':'🌙'; try{localStorage.setItem('lvn-theme',t);}catch(e){} }
 let savedTheme='light'; try{ savedTheme=localStorage.getItem('lvn-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }catch(e){}
@@ -494,7 +515,9 @@ applyTheme(savedTheme);
 themeBtn.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
 renderApp();
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+  });
 }
 </script>
 </body>
