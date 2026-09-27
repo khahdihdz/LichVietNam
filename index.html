@@ -313,11 +313,7 @@ const LUNAR_HOLIDAYS=[
   {d:30,m:12,name:"Tất niên (30 Tết)",type:"Phong tục truyền thống",official:false}
 ];
 
-function findHolidaySolar(d,m){ return SOLAR_HOLIDAYS.find(h=>h.d===d&&h.m===m); }
-function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDAYS.find(h=>h.d===ld&&h.m===lm); }
-
-/* ---------- App state / rendering ---------- */
-
+function findHolidaySolar(d,m,y){ return (y && window.getAnnualHoliday ? window.getAnnualHoliday(d,m,y) : null) || SOLAR_HOLIDAYS.find(h=>h.d===d&&h.m===m); }
 function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDAYS.find(h=>h.d===ld&&h.m===lm); }
 
 /* ---------- App state / rendering ---------- */
