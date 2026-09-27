@@ -12,16 +12,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
       - name: Install dependencies
-        run: npm ci || echo "no package.json yet, skipping"
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npm ci
+
       - name: Lint (nếu có cấu hình)
+        if: ${{ hashFiles('package.json') != '' }}
         run: npm run lint --if-present
+
       - name: Typecheck (nếu dùng TypeScript)
+        if: ${{ hashFiles('package.json') != '' }}
         run: npm run typecheck --if-present
+
       - name: Unit tests lịch (bắt buộc phải pass)
         run: node --test calendar-engine.test.js
+
       - name: Build (nếu có script build)
+        if: ${{ hashFiles('package.json') != '' }}
         run: npm run build --if-present
