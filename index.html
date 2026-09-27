@@ -86,7 +86,7 @@ label.chk{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut
 .err{color:var(--accent);font-size:13px;margin-top:6px;}
 .hitem{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;}
 .hitem:last-child{border-bottom:none;}
-.hitem .tag{font-size:10px;color:var(--muted);text-transform:uppercase;}
+.hitem .tag{font-size:10px;color:var(--muted);text-transform:uppercase;text-align:right;max-width:42%;}.hitem b{color:var(--accent);}
 .note{font-size:12px;color:var(--muted);margin-top:10px;}
 .yeargrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 @media(max-width:480px){.yeargrid{grid-template-columns:repeat(2,1fr);}}
@@ -278,25 +278,45 @@ const MONTHS_SHORT=["T2","T3","T4","T5","T6","T7","CN"];
 
 /* Holidays (subset, illustrative — not exhaustive, not legally authoritative) */
 const SOLAR_HOLIDAYS=[
-  {d:1,m:1,name:"Tết Dương lịch",type:"Ngày lễ chính thức"},
-  {d:8,m:3,name:"Quốc tế Phụ nữ",type:"Ngày kỷ niệm"},
-  {d:1,m:5,name:"Quốc tế Lao động",type:"Ngày lễ chính thức"},
-  {d:1,m:6,name:"Quốc tế Thiếu nhi",type:"Ngày kỷ niệm"},
-  {d:27,m:7,name:"Ngày Thương binh - Liệt sĩ",type:"Ngày truyền thống"},
-  {d:2,m:9,name:"Quốc khánh",type:"Ngày lễ chính thức"},
-  {d:20,m:11,name:"Ngày Nhà giáo Việt Nam",type:"Ngày kỷ niệm"},
-  {d:22,m:12,name:"Thành lập QĐND Việt Nam",type:"Ngày kỷ niệm"},
+  // Ngày nghỉ lễ, Tết theo Điều 112 Bộ luật Lao động
+  {d:1,m:1,name:"Tết Dương lịch",type:"Nghỉ lễ chính thức",official:true,legal:"Điều 112 Bộ luật Lao động"},
+  {d:30,m:4,name:"Ngày Chiến thắng",type:"Nghỉ lễ chính thức",official:true,legal:"Điều 112 Bộ luật Lao động"},
+  {d:1,m:5,name:"Ngày Quốc tế Lao động",type:"Nghỉ lễ chính thức",official:true,legal:"Điều 112 Bộ luật Lao động"},
+  {d:2,m:9,name:"Ngày Quốc khánh",type:"Nghỉ lễ chính thức",official:true,legal:"Điều 112 Bộ luật Lao động"},
+  // Ngày kỷ niệm, truyền thống được sử dụng phổ biến tại Việt Nam
+  {d:3,m:2,name:"Ngày thành lập Đảng Cộng sản Việt Nam",type:"Ngày kỷ niệm",official:false},
+  {d:8,m:3,name:"Ngày Quốc tế Phụ nữ",type:"Ngày kỷ niệm quốc tế",official:false},
+  {d:26,m:3,name:"Ngày thành lập Đoàn TNCS Hồ Chí Minh",type:"Ngày kỷ niệm",official:false},
+  {d:30,m:3,name:"Ngày thành lập Quân chủng Hải quân Nhân dân Việt Nam",type:"Ngày truyền thống",official:false},
+  {d:1,m:6,name:"Ngày Quốc tế Thiếu nhi",type:"Ngày kỷ niệm quốc tế",official:false},
+  {d:27,m:7,name:"Ngày Thương binh - Liệt sĩ",type:"Ngày kỷ niệm",official:false},
+  {d:19,m:8,name:"Ngày truyền thống Công an nhân dân Việt Nam",type:"Ngày truyền thống",official:false},
+  {d:10,m:10,name:"Ngày Giải phóng Thủ đô",type:"Ngày kỷ niệm",official:false},
+  {d:20,m:10,name:"Ngày Phụ nữ Việt Nam",type:"Ngày kỷ niệm",official:false},
+  {d:20,m:11,name:"Ngày Nhà giáo Việt Nam",type:"Ngày kỷ niệm",official:false},
+  {d:22,m:12,name:"Ngày thành lập Quân đội Nhân dân Việt Nam",type:"Ngày truyền thống",official:false}
 ];
 const LUNAR_HOLIDAYS=[
-  {d:1,m:1,name:"Tết Nguyên Đán",type:"Ngày lễ chính thức"},
-  {d:15,m:1,name:"Rằm tháng Giêng",type:"Ngày lễ dân gian"},
-  {d:10,m:3,name:"Giỗ Tổ Hùng Vương",type:"Ngày lễ chính thức"},
-  {d:5,m:5,name:"Tết Đoan Ngọ",type:"Ngày lễ dân gian"},
-  {d:15,m:7,name:"Vu Lan",type:"Ngày lễ dân gian"},
-  {d:15,m:8,name:"Tết Trung Thu",type:"Ngày lễ dân gian"},
-  {d:23,m:12,name:"Ông Công Ông Táo",type:"Ngày lễ dân gian"},
+  // Ngày nghỉ lễ, Tết theo pháp luật
+  {d:1,m:1,name:"Tết Nguyên Đán",type:"Nghỉ Tết chính thức",official:true,legal:"05 ngày theo Điều 112 Bộ luật Lao động",range:"Mùng 1 Tết là ngày đầu năm; 05 ngày nghỉ cụ thể do cơ quan có thẩm quyền/người sử dụng lao động xác định theo quy định"},
+  {d:10,m:3,name:"Giỗ Tổ Hùng Vương",type:"Nghỉ lễ chính thức",official:true,legal:"Điều 112 Bộ luật Lao động"},
+  // Ngày lễ, Tết và phong tục truyền thống
+  {d:15,m:1,name:"Tết Nguyên Tiêu (Rằm tháng Giêng)",type:"Ngày lễ truyền thống",official:false},
+  {d:3,m:3,name:"Tết Hàn Thực",type:"Ngày lễ truyền thống",official:false},
+  {d:5,m:5,name:"Tết Đoan Ngọ",type:"Ngày lễ truyền thống",official:false},
+  {d:7,m:7,name:"Thất Tịch",type:"Ngày lễ truyền thống",official:false},
+  {d:15,m:7,name:"Lễ Vu Lan - Rằm tháng Bảy",type:"Ngày lễ truyền thống/tín ngưỡng",official:false},
+  {d:15,m:8,name:"Tết Trung Thu",type:"Ngày lễ truyền thống",official:false},
+  {d:9,m:9,name:"Tết Trùng Cửu",type:"Ngày lễ truyền thống",official:false},
+  {d:23,m:12,name:"Ông Công, Ông Táo",type:"Ngày lễ truyền thống",official:false},
+  {d:30,m:12,name:"Tất niên (30 Tết)",type:"Phong tục truyền thống",official:false}
 ];
+
 function findHolidaySolar(d,m){ return SOLAR_HOLIDAYS.find(h=>h.d===d&&h.m===m); }
+function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDAYS.find(h=>h.d===ld&&h.m===lm); }
+
+/* ---------- App state / rendering ---------- */
+
 function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDAYS.find(h=>h.d===ld&&h.m===lm); }
 
 /* ---------- App state / rendering ---------- */
@@ -461,15 +481,35 @@ function doL2S(e){
   return false;
 }
 
+function renderHolidayItem(h, lunar=false){
+  const date=lunar ? `${h.d}/${h.m} âm lịch` : `${String(h.d).padStart(2,'0')}/${String(h.m).padStart(2,'0')}`;
+  return `<div class="hitem"><span><b>${date}</b> — ${h.name}</span><span class="tag">${h.type}</span></div>`;
+}
 function renderHolidays(){
+  const solarOfficial=SOLAR_HOLIDAYS.filter(h=>h.official);
+  const solarOther=SOLAR_HOLIDAYS.filter(h=>!h.official);
+  const lunarOfficial=LUNAR_HOLIDAYS.filter(h=>h.official);
+  const lunarOther=LUNAR_HOLIDAYS.filter(h=>!h.official);
   return `<div class="card">
-    <h3 style="margin-top:0;">Ngày lễ Dương lịch</h3>
-    ${SOLAR_HOLIDAYS.map(h=>`<div class="hitem"><span>${String(h.d).padStart(2,'0')}/${String(h.m).padStart(2,'0')} — ${h.name}</span><span class="tag">${h.type}</span></div>`).join("")}
+    <h3 style="margin-top:0;">🇻🇳 Ngày nghỉ lễ, Tết chính thức</h3>
+    <div class="note">Theo Điều 112 Bộ luật Lao động: Tết Dương lịch 01 ngày; Tết Âm lịch 05 ngày; Ngày Chiến thắng 30/4; Quốc tế Lao động 1/5; Quốc khánh 2/9 và 01 ngày liền kề; Giỗ Tổ Hùng Vương 10/3 âm lịch. Lịch nghỉ thực tế từng năm có thể có phương án nghỉ cụ thể và ngày nghỉ bù.</div>
+    <h4>Dương lịch</h4>
+    ${solarOfficial.map(h=>renderHolidayItem(h)).join("")}
+    <h4>Âm lịch</h4>
+    ${lunarOfficial.map(h=>renderHolidayItem(h,true)).join("")}
   </div>
   <div class="card">
-    <h3 style="margin-top:0;">Ngày lễ Âm lịch</h3>
-    ${LUNAR_HOLIDAYS.map(h=>`<div class="hitem"><span>${h.d}/${h.m} âm — ${h.name}</span><span class="tag">${h.type}</span></div>`).join("")}
-    <div class="note">Danh sách minh họa, chưa đầy đủ và không phải văn bản pháp lý về ngày nghỉ lễ chính thức theo từng năm.</div>
+    <h3 style="margin-top:0;">📅 Ngày kỷ niệm, truyền thống Dương lịch</h3>
+    ${solarOther.map(h=>renderHolidayItem(h)).join("")}
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">🌙 Ngày lễ, Tết và phong tục Âm lịch</h3>
+    ${lunarOther.map(h=>renderHolidayItem(h,true)).join("")}
+    <div class="note">Các ngày trong nhóm này được ghi nhận là ngày lễ/truyền thống hoặc phong tục văn hóa, không đồng nghĩa với ngày nghỉ hưởng nguyên lương theo Điều 112 Bộ luật Lao động.</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">📌 Nguồn và phạm vi</h3>
+    <div class="note">Nhóm “Nghỉ lễ chính thức” được phân biệt riêng với ngày kỷ niệm và lễ truyền thống. Lịch nghỉ cụ thể của từng năm cần đối chiếu thông báo chính thức của cơ quan có thẩm quyền.</div>
   </div>`;
 }
 
