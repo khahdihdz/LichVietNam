@@ -15,7 +15,8 @@
 - ☀️ Hiển thị tiết khí.
 - 🕐 Hiển thị giờ Hoàng đạo theo bảng truyền thống.
 - 🌙 Hiển thị pha Mặt Trăng ở mức ước tính theo ngày âm lịch.
-- 🎉 Tra cứu các ngày lễ/ngày kỷ niệm được khai báo trong ứng dụng.
+- 🎉 Tra cứu ngày nghỉ lễ, Tết theo từng năm và phân biệt với ngày kỷ niệm/phong tục.
+- 🇻🇳 Có dữ liệu lịch nghỉ cụ thể năm 2026, gồm Tết, Giỗ Tổ, 30/4, 1/5, Quốc khánh và Ngày Văn hóa Việt Nam.
 - 🗓️ Xem lịch tháng và lịch năm.
 - 🌓 Giao diện sáng/tối.
 - 📱 Responsive cho điện thoại, máy tính bảng và máy tính.
@@ -84,6 +85,7 @@ LichVietNam/
 ├── calendar-engine.js    # Engine lịch Âm – Dương có thể tái sử dụng
 ├── calendar-engine.test.js
 ├── index.html             # Giao diện web/PWA
+├── holiday-schedule.js    # Lịch nghỉ chính thức theo từng năm
 ├── manifest.json          # PWA manifest
 ├── sw.js                  # Service Worker
 ├── icon-192.png           # Icon PWA 192×192
@@ -112,11 +114,16 @@ Khi đóng góp vào phần tính lịch, vui lòng:
 4. Giữ múi giờ Việt Nam (UTC+7) khi xử lý lịch Việt Nam.
 5. Ghi rõ nguồn tham khảo nếu bổ sung thuật toán hoặc dữ liệu từ dự án khác.
 
-## ⚠️ Lưu ý về dữ liệu ngày lễ
+## 🇻🇳 Dữ liệu ngày lễ và lịch nghỉ theo năm
 
-Danh sách ngày lễ hiện được khai báo trực tiếp trong mã nguồn và có ghi chú rằng đây là danh sách minh họa/chưa đầy đủ. Một số ngày nghỉ thực tế có thể phụ thuộc vào quy định hoặc lịch nghỉ được ban hành cho từng năm.
+Dự án tách dữ liệu thành hai nhóm:
 
-Do đó, **không sử dụng danh sách ngày lễ trong ứng dụng như một nguồn pháp lý duy nhất**.
+1. **Ngày nghỉ chính thức theo năm** trong `holiday-schedule.js`: chỉ ghi các ngày có lịch cụ thể đã được công bố.
+2. **Ngày kỷ niệm, truyền thống và phong tục** trong `index.html`: dùng để tra cứu văn hóa, không mặc nhiên là ngày nghỉ hưởng nguyên lương.
+
+Dữ liệu năm 2026 được đối chiếu với thông tin công bố trên Cổng Thông tin điện tử Chính phủ và các thông báo liên quan của Bộ Nội vụ. Năm chưa có lịch nghỉ cụ thể sẽ không được ứng dụng tự suy đoán.
+
+> Ứng dụng là công cụ tra cứu tiện ích, không thay thế văn bản pháp luật hoặc thông báo nghỉ lễ chính thức. Khi cần dùng cho mục đích hành chính, lao động hoặc pháp lý, hãy đối chiếu văn bản áp dụng cho đúng năm và đối tượng.
 
 ## 📚 Nguồn tham khảo và ghi nhận
 
