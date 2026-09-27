@@ -1,0 +1,14 @@
+{
+  "name": "Lịch Việt Nam",
+  "short_name": "Lịch VN",
+  "description": "Lịch Âm Dương Việt Nam - Can Chi, tiết khí, ngày lễ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#b5442e",
+  "lang": "vi",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

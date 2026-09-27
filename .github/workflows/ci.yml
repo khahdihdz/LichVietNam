@@ -1,0 +1,27 @@
+# Đặt file này tại: .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci || echo "no package.json yet, skipping"
+      - name: Lint (nếu có cấu hình)
+        run: npm run lint --if-present
+      - name: Typecheck (nếu dùng TypeScript)
+        run: npm run typecheck --if-present
+      - name: Unit tests lịch (bắt buộc phải pass)
+        run: node --test calendar-engine.test.js
+      - name: Build (nếu có script build)
+        run: npm run build --if-present

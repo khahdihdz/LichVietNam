@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://khahdihdz.github.io/sitemap.xml
