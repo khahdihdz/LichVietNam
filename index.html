@@ -103,6 +103,18 @@ footer{max-width:720px;margin:0 auto;padding:18px 14px 30px;text-align:center;fo
 footer a{color:var(--accent);text-decoration:none;font-weight:600;}
 footer a:hover{text-decoration:underline;}
 ::-webkit-scrollbar{display:none;}
+#updateNotice{
+  position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px;border:1px solid var(--line);border-radius:14px;
+  background:var(--card);color:var(--text);box-shadow:0 8px 28px rgba(0,0,0,.18);
+  font-size:14px;
+}
+#updateNotice button{
+  border:0;border-radius:10px;padding:9px 12px;background:var(--accent);color:#fff;
+  font-weight:700;white-space:nowrap;cursor:pointer;
+}
+@media (max-width:420px){#updateNotice{font-size:13px;align-items:flex-start}#updateNotice button{padding:8px 10px}}
 </style>
 </head>
 <body>
@@ -560,9 +572,46 @@ applyTheme(savedTheme);
 themeBtn.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
 renderApp();
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
-  });
+  let reloadingAfterUpdate=false;
+  const showUpdateNotice=()=>{
+    if(document.getElementById('updateNotice')) return;
+    const box=document.createElement('div');
+    box.id='updateNotice';
+    box.setAttribute('role','status');
+    box.innerHTML='<span>✨ Lịch Việt Nam đã có phiên bản mới.</span><button type="button" id="updateNow">Cập nhật</button>';
+    document.body.appendChild(box);
+    document.getElementById('updateNow').addEventListener('click',()=>{
+      const reg=window.__lvServiceWorkerRegistration;
+      if(reg && reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+      else window.location.reload();
+    });
+  };
+  const registerSW=async()=>{
+    try{
+      const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
+      window.__lvServiceWorkerRegistration=reg;
+      if(reg.waiting && navigator.serviceWorker.controller) showUpdateNotice();
+      reg.addEventListener('updatefound',()=>{
+        const worker=reg.installing;
+        if(!worker) return;
+        worker.addEventListener('statechange',()=>{
+          if(worker.state==='installed' && navigator.serviceWorker.controller) showUpdateNotice();
+        });
+      });
+      try{ await reg.update(); }catch(e){}
+      document.addEventListener('visibilitychange',()=>{
+        if(document.visibilityState==='visible') reg.update().catch(()=>{});
+      });
+      window.addEventListener('online',()=>reg.update().catch(()=>{}));
+      navigator.serviceWorker.addEventListener('controllerchange',()=>{
+        if(reloadingAfterUpdate) return;
+        reloadingAfterUpdate=true;
+        window.location.reload();
+      });
+    }catch(e){}
+  };
+  if(document.readyState==='loading') window.addEventListener('load',registerSW);
+  else registerSW();
 }
 </script>
 </body>
