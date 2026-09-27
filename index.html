@@ -26,6 +26,7 @@
 }
 </script>
 <title>Lịch Việt Nam - Lịch Âm Dương</title>
+<script src="holiday-schedule.js"></script>
 <style>
 :root{
   --bg:#f7f5f0; --card:#fff; --text:#1f2320; --muted:#6b7168; --accent:#b5442e;
@@ -329,7 +330,7 @@ function todayVN(){ return {d:now.getDate(),m:now.getMonth()+1,y:now.getFullYear
 function renderToday(){
   const t=todayVN();
   const lu=convertSolar2Lunar(t.d,t.m,t.y);
-  const hs=findHolidaySolar(t.d,t.m);
+  const hs=findHolidaySolar(t.d,t.m,t.y);
   const hl=findHolidayLunar(lu.day,lu.month,lu.leap);
   const tk=getTietKhiInfo(t.d,t.m,t.y);
   const fmt=(a)=>a?`${String(a[0]).padStart(2,'0')}/${String(a[1]).padStart(2,'0')}/${a[2]}`:"?";
@@ -372,7 +373,7 @@ function renderMonth(){
       if(c.other){ if(cells.indexOf(c)<startDow){ m=viewMonth-1===0?12:viewMonth-1; y=viewMonth-1===0?viewYear-1:viewYear; } else { m=viewMonth+1===13?1:viewMonth+1; y=viewMonth+1===13?viewYear+1:viewYear; } }
       const lu=convertSolar2Lunar(c.d,m,y);
       const isToday=!c.other&&c.d===t.d&&m===t.m&&y===t.y;
-      const hs=!c.other&&findHolidaySolar(c.d,m);
+      const hs=!c.other&&findHolidaySolar(c.d,m,y);
       const hl=!c.other&&findHolidayLunar(lu.day,lu.month,lu.leap);
       const cls=[c.other?"other":"", isToday?"today":"", (hs||hl)?"holiday":""].join(" ");
       return `<td class="${cls}"><div class="d">${c.d}</div><div class="l">${lu.day}${lu.leap?"n":""}</div></td>`;
@@ -486,17 +487,25 @@ function renderHolidayItem(h, lunar=false){
   return `<div class="hitem"><span><b>${date}</b> — ${h.name}</span><span class="tag">${h.type}</span></div>`;
 }
 function renderHolidays(){
+  const year=now.getFullYear();
+  const annual=window.getAnnualHolidaysForYear ? window.getAnnualHolidaysForYear(year) : [];
   const solarOfficial=SOLAR_HOLIDAYS.filter(h=>h.official);
   const solarOther=SOLAR_HOLIDAYS.filter(h=>!h.official);
-  const lunarOfficial=LUNAR_HOLIDAYS.filter(h=>h.official);
   const lunarOther=LUNAR_HOLIDAYS.filter(h=>!h.official);
+  const fmtDate=iso=>{const [y,m,d]=iso.split("-");return `${d}/${m}/${y}`;};
   return `<div class="card">
-    <h3 style="margin-top:0;">🇻🇳 Ngày nghỉ lễ, Tết chính thức</h3>
-    <div class="note">Theo Điều 112 Bộ luật Lao động: Tết Dương lịch 01 ngày; Tết Âm lịch 05 ngày; Ngày Chiến thắng 30/4; Quốc tế Lao động 1/5; Quốc khánh 2/9 và 01 ngày liền kề; Giỗ Tổ Hùng Vương 10/3 âm lịch. Lịch nghỉ thực tế từng năm có thể có phương án nghỉ cụ thể và ngày nghỉ bù.</div>
-    <h4>Dương lịch</h4>
+    <h3 style="margin-top:0;">🇻🇳 Lịch nghỉ lễ, Tết năm ${year}</h3>
+    ${annual.length ? annual.map(h=>`<div class="hitem"><span><b>${fmtDate(h.date)}</b> — ${h.name}</span><span class="tag">${h.type}</span></div>`).join("") : '<div class="note">Chưa có dữ liệu lịch nghỉ theo năm này. Các ngày cố định theo luật vẫn được hiển thị bên dưới.</div>'}
+    <div class="note">Dữ liệu theo năm chỉ ghi nhận những ngày có lịch cụ thể đã được công bố. Lịch nghỉ của doanh nghiệp có thể có phương án khác trong phạm vi pháp luật cho phép.</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">📜 Ngày nghỉ lễ, Tết theo quy định</h3>
+    <div class="note">Theo quy định hiện hành, người lao động được nghỉ hưởng nguyên lương vào Tết Dương lịch, Tết Âm lịch, 30/4, 1/5, Quốc khánh và Giỗ Tổ Hùng Vương. Năm 2026 có thêm ngày 24/11 — Ngày Văn hóa Việt Nam — theo Nghị quyết 28/2026/QH16.</div>
+    <h4>Dương lịch cố định</h4>
     ${solarOfficial.map(h=>renderHolidayItem(h)).join("")}
     <h4>Âm lịch</h4>
-    ${lunarOfficial.map(h=>renderHolidayItem(h,true)).join("")}
+    <div class="hitem"><span><b>01/01</b> — Tết Nguyên Đán</span><span class="tag">05 ngày nghỉ</span></div>
+    <div class="hitem"><span><b>10/03</b> — Giỗ Tổ Hùng Vương</span><span class="tag">Nghỉ lễ chính thức</span></div>
   </div>
   <div class="card">
     <h3 style="margin-top:0;">📅 Ngày kỷ niệm, truyền thống Dương lịch</h3>
@@ -505,11 +514,11 @@ function renderHolidays(){
   <div class="card">
     <h3 style="margin-top:0;">🌙 Ngày lễ, Tết và phong tục Âm lịch</h3>
     ${lunarOther.map(h=>renderHolidayItem(h,true)).join("")}
-    <div class="note">Các ngày trong nhóm này được ghi nhận là ngày lễ/truyền thống hoặc phong tục văn hóa, không đồng nghĩa với ngày nghỉ hưởng nguyên lương theo Điều 112 Bộ luật Lao động.</div>
+    <div class="note">Nhóm này là ngày lễ/truyền thống hoặc phong tục văn hóa; không mặc nhiên là ngày nghỉ hưởng nguyên lương.</div>
   </div>
   <div class="card">
-    <h3 style="margin-top:0;">📌 Nguồn và phạm vi</h3>
-    <div class="note">Nhóm “Nghỉ lễ chính thức” được phân biệt riêng với ngày kỷ niệm và lễ truyền thống. Lịch nghỉ cụ thể của từng năm cần đối chiếu thông báo chính thức của cơ quan có thẩm quyền.</div>
+    <h3 style="margin-top:0;">📌 Ghi chú nguồn dữ liệu</h3>
+    <div class="note">Lịch theo năm được tách khỏi danh sách ngày truyền thống để tránh nhầm giữa ngày kỷ niệm và ngày nghỉ chính thức. Với năm chưa có thông báo cụ thể, ứng dụng không tự suy đoán lịch nghỉ.</div>
   </div>`;
 }
 
