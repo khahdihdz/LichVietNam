@@ -7,6 +7,30 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![PWA](https://img.shields.io/badge/PWA-ready-5a0.svg)](manifest.json)
 
+## ℹ️ Thông tin repository
+
+| Mục | Thông tin |
+|---|---|
+| **Tên dự án** | Lịch Việt Nam |
+| **Repository** | `khahdihdz/LichVietNam` |
+| **Loại** | Web app / Progressive Web App (PWA) |
+| **Ngôn ngữ chính** | HTML, CSS, JavaScript |
+| **Giấy phép** | MIT |
+| **Múi giờ lịch** | UTC+7 — Việt Nam |
+| **Chạy** | Trình duyệt hiện đại, Android, iOS, máy tính |
+| **Offline** | Có, thông qua Service Worker |
+| **Backend** | Không yêu cầu |
+| **Trang web** | https://khahdihdz.github.io |
+| **Mã nguồn** | https://github.com/khahdihdz/LichVietNam |
+
+### 🧭 Phạm vi dự án
+
+Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam trên web: lịch Dương – Âm, Can Chi, tiết khí, giờ Hoàng đạo, ngày lễ và chuyển đổi ngày. Ứng dụng được thiết kế theo hướng **nhẹ, không phụ thuộc framework, ưu tiên riêng tư và có thể sử dụng offline**.
+
+### 📲 PWA & chia sẻ
+
+Ứng dụng có Web App Manifest, Service Worker, biểu tượng cài đặt và metadata Open Graph/Twitter Card để hiển thị tiêu đề, mô tả và hình ảnh khi chia sẻ liên kết trên các nền tảng hỗ trợ.
+
 ## ✨ Tính năng
 
 - 📅 Xem lịch Dương – Âm theo ngày.
