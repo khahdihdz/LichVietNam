@@ -132,6 +132,101 @@ footer a:hover{text-decoration:underline;}
   font-weight:700;white-space:nowrap;cursor:pointer;
 }
 @media (max-width:420px){#updateNotice{font-size:13px;align-items:flex-start}#updateNotice button{padding:8px 10px}}
+
+/* ---------- iPhone / iPad accessibility & responsive sizing ---------- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;}
+body{min-width:0;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
+button,input{font:inherit;}
+button{min-height:44px;}
+main{width:100%;max-width:960px;padding:20px clamp(16px,3vw,28px);}
+.card{padding:clamp(18px,3vw,26px);margin-bottom:18px;border-radius:16px;}
+header{padding:12px max(16px,env(safe-area-inset-left)) 12px max(16px,env(safe-area-inset-right));min-height:56px;}
+header h1{font-size:clamp(18px,2.4vw,22px);}
+.hamburger{width:44px;height:44px;font-size:21px;}
+.themebtn{width:44px;height:44px;font-size:21px;}
+.installbtn{min-height:44px;padding:9px 13px;font-size:15px;}
+.navmenu{top:50px;min-width:220px;}
+.navmenu button{min-height:48px;padding:12px 16px;font-size:16px;}
+.hero .dow{font-size:15px;}
+.hero .big{font-size:clamp(72px,14vw,108px);}
+.hero .mo{font-size:18px;}
+.hero .lunar{font-size:21px;}
+.hero .canchi{font-size:15px;}
+.grid-info{gap:12px;margin-top:14px;}
+.grid-info div{padding:12px 14px;font-size:15px;}
+.grid-info b{font-size:12px;margin-bottom:4px;}
+table.month th{font-size:14px;padding:7px 0;}
+table.month td{height:clamp(68px,9vw,88px);padding:7px 3px;}
+table.month td .d{font-size:clamp(17px,2.5vw,21px);font-weight:600;}
+table.month td .l{font-size:clamp(12px,1.8vw,15px);}
+.monthnav{margin-bottom:14px;}
+.monthnav button{min-width:48px;min-height:44px;padding:8px 13px;font-size:18px;}
+.monthnav span{font-size:19px;}
+.row3{gap:10px;}
+.row3 input{min-height:48px;padding:11px 12px;font-size:17px;}
+form.conv{gap:12px;}
+.tabbtn{gap:8px;margin-bottom:14px;}
+.tabbtn button{min-height:48px;padding:10px;font-size:16px;}
+.result{padding:15px;font-size:18px;}
+.err{font-size:15px;}
+.hitem{padding:12px 0;font-size:16px;gap:12px;}
+.hitem .tag{font-size:12px;max-width:40%;}
+.note{font-size:14px;line-height:1.55;}
+.yeargrid{gap:12px;}
+.mini{padding:8px;}
+.mini h4{font-size:14px;margin-bottom:6px;}
+.mini td{font-size:11px;padding:2px;}
+.tietkhi{font-size:14px;}
+footer{max-width:960px;padding:22px 16px calc(36px + env(safe-area-inset-bottom,0px));font-size:14px;}
+#updateNotice{font-size:16px;padding:14px 16px;}
+#updateNotice button{min-height:44px;padding:10px 14px;font-size:15px;}
+
+@media (min-width:768px) and (max-width:1180px){
+  main{max-width:1024px;padding:24px 28px;}
+  .card{padding:24px;}
+  .hero .big{font-size:104px;}
+  table.month td{height:82px;}
+  table.month td .d{font-size:21px;}
+  table.month td .l{font-size:14px;}
+  .yeargrid{grid-template-columns:repeat(4,1fr);}
+}
+
+@media (max-width:767px){
+  main{padding:16px 14px;}
+  .grid-info{grid-template-columns:1fr 1fr;}
+  .hero .big{font-size:clamp(72px,22vw,96px);}
+  table.month{min-width:0;}
+  table.month td{height:clamp(64px,17vw,78px);}
+}
+
+@media (max-width:430px){
+  header{padding-left:12px;padding-right:12px;}
+  header h1{font-size:18px;}
+  header>div{gap:4px!important;}
+  .installbtn{padding:8px 10px;font-size:14px;}
+  main{padding:12px 10px;}
+  .card{padding:15px;margin-bottom:12px;}
+  .grid-info{gap:8px;}
+  .grid-info div{padding:10px;font-size:14px;}
+  .hero .big{font-size:78px;}
+  .hero .lunar{font-size:19px;}
+  table.month th{font-size:13px;}
+  table.month td{height:66px;padding:5px 1px;}
+  table.month td .d{font-size:17px;}
+  table.month td .l{font-size:11px;}
+  .row3{gap:7px;}
+  .row3 input{font-size:16px;padding:10px 7px;}
+  .hitem{font-size:15px;}
+  .hitem .tag{font-size:11px;}
+  .yeargrid{gap:8px;}
+}
+
+@media (orientation:landscape) and (max-height:500px){
+  header{position:relative;}
+  .hero .big{font-size:64px;}
+  table.month td{height:58px;}
+}
+
 </style>
 </head>
 <body>
