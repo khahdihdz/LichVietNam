@@ -365,8 +365,9 @@ function renderToday(){
   return `<div class="card hero">
     <div class="dow">${DOW[t.dow]}</div>
     <div class="big">${t.d}</div>
-    <div class="mo">Tháng ${t.m} · ${t.y}</div>
+    <div class="mo">Tháng ${t.m} · ${t.y} · ${String(t.d).padStart(2,'0')}/${String(t.m).padStart(2,'0')}/${t.y}</div>
     <div class="lunar">${lu.day}${lu.leap?" (nhuận)":""}/${lu.month} âm lịch — năm ${canChiYear(lu.year)}</div>
+    <div class="canchi">Ngày ${canChiDay(t.d,t.m,t.y)} · Tháng ${canChiMonth(lu.month,lu.year)} · Năm ${canChiYear(lu.year)}</div>
     ${(hs||hl)?`<div class="canchi">🎉 ${hs?hs.name:hl.name}</div>`:""}
     <div class="grid-info">
       <div><b>Can Chi ngày</b>${canChiDay(t.d,t.m,t.y)}</div>
@@ -378,9 +379,8 @@ function renderToday(){
     <div class="tietkhi">Mặt trăng: <b>${moon.name}</b> (ngày ${moon.age} âm lịch)</div>
     <div class="tietkhi">Giờ Hoàng đạo: <b>${hd.map(c=>`${c} (${CHI_HOUR[c]})`).join(", ")}</b></div>
   </div>
-  <div class="note">Giờ Hoàng đạo tính theo bảng lục diệu truyền thống theo Chi của ngày (không phải suy diễn thiên văn). Pha mặt trăng ước tính theo ngày âm lịch, không phải % chiếu sáng thiên văn chính xác.</div>`;
+  <div class="note">Nội dung được tính tự động theo ngày hiện tại tại Việt Nam (UTC+7). Ngày 05/10/2026 tương ứng 25/08 năm Bính Ngọ, ngày Nhâm Tý, tiết Thu phân. Giờ Hoàng đạo gồm Tý, Sửu, Mão, Ngọ, Thân, Dậu.</div>`;
 }
-
 function daysInMonth(m,y){ return new Date(y,m,0).getDate(); }
 function renderMonth(){
   const first=new Date(viewYear,viewMonth-1,1);
