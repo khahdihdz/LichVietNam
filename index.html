@@ -62,7 +62,7 @@ header{position:sticky;top:0;top:env(safe-area-inset-top,0px);background:var(--c
 header h1{font-size:16px;margin:0;letter-spacing:.3px;}
 .navwrap{position:relative;}
 .hamburger{background:none;border:1px solid var(--line);color:var(--text);width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;}
-.navmenu{position:absolute;right:0;top:44px;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:170px;display:none;overflow:hidden;z-index:30;}
+.navmenu{position:absolute;right:0;top:44px;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:190px;display:none;max-height:calc(100dvh - 70px);overflow-y:auto;z-index:30;}
 .navmenu.open{display:block;}
 .navmenu button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--text);padding:11px 14px;font-size:14px;cursor:pointer;}
 .navmenu button.active{background:var(--accent);color:#fff;}
@@ -256,6 +256,68 @@ table.month td.today.selected{outline-color:var(--text);}
 .about .kv:last-child{border-bottom:none;}
 .about .kv span:first-child{color:var(--muted);}
 
+/* ---------- Ghi chú & sự kiện ---------- */
+.note-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;}
+.note-head h3{margin:0;font-size:16px;}
+.note-status{font-size:12px;color:var(--muted);}
+.note-card textarea{width:100%;min-height:90px;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:10px;font:inherit;font-size:14px;line-height:1.5;}
+.note-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:8px;}
+.mini-btn{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:7px 12px;font-size:13px;cursor:pointer;}
+.mini-btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.ev-form{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.ev-form input,.ev-form select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:9px;font:inherit;font-size:14px;min-width:0;color-scheme:light;}
+:root[data-theme="dark"] .ev-form input,:root[data-theme="dark"] .ev-form select{color-scheme:dark;}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .ev-form input,:root:not([data-theme="light"]) .ev-form select{color-scheme:dark;}
+}
+.ev-row{display:flex;gap:8px;flex-wrap:wrap;}
+.ev-row input[type="time"]{flex:0 1 128px;width:auto;}
+.ev-row select{flex:1 1 170px;width:auto;}
+.ev-row button{flex:0 0 auto;background:var(--accent);border:0;border-radius:8px;color:#fff;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;}
+.ev-list{margin-top:10px;}
+.ev-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;}
+.ev-item:last-child{border-bottom:none;}
+.ev-time{flex:0 0 auto;min-width:42px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;}
+.ev-body{flex:1 1 auto;min-width:0;}
+.ev-title{overflow-wrap:anywhere;}
+.ev-tag{display:block;font-size:11px;color:var(--muted);margin-top:1px;}
+.ev-del{flex:0 0 auto;background:none;border:0;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;}
+.ev-del:hover{color:var(--accent);}
+.ev-empty{font-size:13px;color:var(--muted);margin-top:6px;}
+.marks{display:flex;gap:2px;justify-content:center;height:5px;margin-top:2px;}
+.marks i{display:block;width:4px;height:4px;border-radius:50%;}
+.marks .m-note{background:var(--accent);}
+.marks .m-event{background:var(--holiday);}
+.note-open{flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);font:inherit;text-align:left;padding:0;cursor:pointer;}
+.note-open b{color:var(--accent);}
+.note-snippet{display:block;color:var(--muted);font-size:12px;margin-top:2px;overflow-wrap:anywhere;}
+
+/* ---------- Tiện ích ---------- */
+.widget{position:relative;overflow:hidden;padding-top:20px;}
+.widget::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--holiday));}
+.w-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.w-clock{font-variant-numeric:tabular-nums;letter-spacing:.5px;}
+.w-main{display:flex;align-items:center;gap:16px;margin-top:6px;}
+.w-big{font-size:clamp(58px,15vw,86px);font-weight:700;line-height:.9;color:var(--accent);}
+.w-meta{font-size:14px;line-height:1.4;}
+.w-lunar{font-size:15px;color:var(--accent);font-weight:600;margin-top:3px;}
+.w-line{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5;}
+.w-note{margin-top:10px;background:var(--bg);border-left:3px solid var(--accent);border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;}
+.w-ev{margin-top:12px;font-size:14px;}
+.w-ev>b{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+.w-up{list-style:none;margin:6px 0 0;padding:0;font-size:13px;}
+.w-up li{display:flex;gap:8px;padding:3px 0;color:var(--text);}
+.w-up li span{color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums;min-width:36px;}
+.w-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px;}
+.w-actions button{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:8px 12px;font-size:13px;cursor:pointer;}
+.w-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.w-link{color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;}
+.w-link:hover{text-decoration:underline;}
+body.widget-mode header,body.widget-mode footer{display:none;}
+body.widget-mode{display:flex;align-items:center;justify-content:center;min-height:100dvh;}
+body.widget-mode main{width:100%;max-width:420px;padding:10px;margin:0 auto;}
+body.widget-mode .widget{margin-bottom:0;}
+
 </style>
 </head>
 <body>
@@ -270,6 +332,8 @@ table.month td.today.selected{outline-color:var(--text);}
         <button data-v="year" role="menuitem">🗓️ Lịch năm</button>
         <button data-v="convert" role="menuitem">🔄 Chuyển đổi</button>
         <button data-v="holidays" role="menuitem">🎉 Ngày lễ</button>
+        <button data-v="notes" role="menuitem">📝 Ghi chú &amp; sự kiện</button>
+        <button data-v="widget" role="menuitem">🧩 Tiện ích</button>
         <button data-v="about" role="menuitem">ℹ️ Giới thiệu</button>
       </div>
     </div>
@@ -472,6 +536,7 @@ function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDA
 
 /* ---------- App state / rendering ---------- */
 let view="today";
+let widgetStandalone=false;
 const now=new Date();
 let viewYear=now.getFullYear(), viewMonth=now.getMonth()+1;
 let selDate={d:now.getDate(),m:now.getMonth()+1,y:now.getFullYear()};
@@ -488,12 +553,25 @@ function updateHash(){
 function clearHash(){
   if(location.hash){ try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} }
 }
+function clearViewParam(){
+  widgetStandalone=false;
+  if(!location.search) return;
+  try{
+    const params=new URLSearchParams(location.search);
+    if(params.has("view")){
+      params.delete("view");
+      const qs=params.toString();
+      history.replaceState(null,"",location.pathname+(qs?"?"+qs:"")+location.hash);
+    }
+  }catch(e){}
+}
 function setSelected(d,m,y,syncUrl){
   if(!(y>=1800&&y<=2199)) return false;
   const dt=new Date(y,m-1,d);
   if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d) return false;
   selDate={d:d,m:m,y:y};
   viewYear=y; viewMonth=m; view="today";
+  clearViewParam();
   if(syncUrl!==false) updateHash();
   renderApp();
   return true;
@@ -510,6 +588,98 @@ function shiftDay(delta){
 function onDateInput(value){
   const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||"");
   if(!m||!setSelected(+m[3],+m[2],+m[1])) renderApp(); // ô chọn ngày quay về ngày đang xem
+}
+
+/* ---------- Ghi chú & sự kiện (lưu cục bộ trên thiết bị) ---------- */
+const NOTES_KEY="lvn-notes-v1", EVENTS_KEY="lvn-events-v1";
+function pad2(n){ return String(n).padStart(2,"0"); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function loadStore(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw) return fallback;
+    const val=JSON.parse(raw);
+    if(key===NOTES_KEY){
+      if(!val||typeof val!=="object"||Array.isArray(val)) return fallback;
+      const out={};
+      Object.keys(val).forEach(k=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&typeof val[k]==="string"&&val[k].trim()) out[k]=val[k]; });
+      return out;
+    }
+    if(key===EVENTS_KEY){
+      if(!Array.isArray(val)) return fallback;
+      return val.filter(ev=>ev&&typeof ev==="object"&&typeof ev.date==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(ev.date)&&typeof ev.title==="string"&&ev.title.trim());
+    }
+    return val;
+  }catch(e){ return fallback; }
+}
+function saveStore(key,val){ try{ localStorage.setItem(key,JSON.stringify(val)); return true; }catch(e){ return false; } }
+let notes=loadStore(NOTES_KEY,{});
+let events=loadStore(EVENTS_KEY,[]);
+
+function parseISO(iso){
+  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||"");
+  if(!m) return null;
+  const y=+m[1], mo=+m[2], d=+m[3], dt=new Date(y,mo-1,d);
+  if(y<1800||y>2199||dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==d) return null;
+  return {d:d,m:mo,y:y};
+}
+function getNote(d,m,y){ return notes[isoOf({d:d,m:m,y:y})]||""; }
+function setNote(d,m,y,text){
+  const k=isoOf({d:d,m:m,y:y}), v=String(text||"").trim();
+  if(v) notes[k]=v; else delete notes[k];
+  return saveStore(NOTES_KEY,notes);
+}
+function eventsOn(d,m,y){
+  const key=isoOf({d:d,m:m,y:y});
+  const lu=convertSolar2Lunar(d,m,y);
+  const out=[];
+  events.forEach(ev=>{
+    let hit=false;
+    if(ev.date===key) hit=true;
+    else if(ev.repeat==="yearly-solar"){ const p=parseISO(ev.date); if(p&&p.d===d&&p.m===m) hit=true; }
+    else if(ev.repeat==="yearly-lunar"&&Number(ev.lunarDay)===lu.day&&Number(ev.lunarMonth)===lu.month) hit=true;
+    if(hit) out.push(ev);
+  });
+  return out.sort((a,b)=>String(a.time||"99:99").localeCompare(String(b.time||"99:99"))||String(a.title).localeCompare(String(b.title),"vi"));
+}
+function addEvent(d,m,y,title,time,repeat){
+  title=String(title||"").trim();
+  time=String(time||"").trim();
+  if(!title) return {ok:false,error:"Vui lòng nhập tên sự kiện."};
+  if(title.length>120) return {ok:false,error:"Tên sự kiện tối đa 120 ký tự."};
+  const dt=new Date(y,m-1,d);
+  if(!(y>=1800&&y<=2199)||dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d) return {ok:false,error:"Ngày không hợp lệ."};
+  if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return {ok:false,error:"Giờ không hợp lệ."};
+  const rep=["none","yearly-solar","yearly-lunar"].indexOf(repeat)>=0?repeat:"none";
+  const lu=convertSolar2Lunar(d,m,y);
+  const ev={id:"ev_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7),date:isoOf({d:d,m:m,y:y}),title:title,time:time,repeat:rep,lunarDay:lu.day,lunarMonth:lu.month,createdAt:new Date().toISOString()};
+  events.push(ev);
+  saveStore(EVENTS_KEY,events);
+  return {ok:true,event:ev};
+}
+function removeEvent(id){
+  const i=events.findIndex(ev=>ev.id===id);
+  if(i<0) return false;
+  events.splice(i,1);
+  saveStore(EVENTS_KEY,events);
+  return true;
+}
+function upcomingEvents(from,days){
+  const out=[], base=jdFromDate(from.d,from.m,from.y);
+  for(let i=0;i<days;i++){
+    const [d,m,y]=jdToDate(base+i);
+    eventsOn(d,m,y).forEach(ev=>out.push({ev:ev,d:d,m:m,y:y}));
+  }
+  return out;
+}
+function repeatLabel(rep){
+  if(rep==="yearly-solar") return "Hằng năm (dương lịch)";
+  if(rep==="yearly-lunar") return "Hằng năm (âm lịch)";
+  return "";
+}
+function clockText(){
+  const n=new Date();
+  return pad2(n.getHours())+":"+pad2(n.getMinutes());
 }
 
 function renderDay(){
@@ -551,8 +721,92 @@ function renderDay(){
       ${isToday?"":'<button type="button" class="primary" onclick="goToday()">🏠 Về hôm nay</button>'}
     </div>
   </div>
+  ${renderDayNote(t)}
+  ${renderDayEvents(t)}
   <div class="note">${isToday?`Đang xem hôm nay (${dd}/${mm}/${t.y}).`:`Đang xem ngày ${dd}/${mm}/${t.y} — không phải hôm nay.`}
   Chọn ngày ở ô phía trên, dùng phím ← → hoặc nhấn vào một ngày trong lịch tháng để tra cứu bất kỳ ngày nào (1800–2199).</div>`;
+}
+function renderDayNote(t){
+  const text=getNote(t.d,t.m,t.y);
+  return `<div class="card note-card">
+    <div class="note-head">
+      <h3>📝 Ghi chú ngày ${pad2(t.d)}/${pad2(t.m)}</h3>
+      <span class="note-status" id="noteStatus">${text?"Đã lưu":"Trống"}</span>
+    </div>
+    <textarea id="dayNote" rows="3" maxlength="2000" placeholder="Ghi chú cho ngày này (lưu trên thiết bị của bạn)…"
+      oninput="onNoteInput()" aria-label="Ghi chú cho ngày ${pad2(t.d)}/${pad2(t.m)}/${t.y}">${esc(text)}</textarea>
+    <div class="note-actions">
+      <button type="button" class="mini-btn" onclick="clearDayNote()">Xoá</button>
+      <button type="button" class="mini-btn accent" onclick="saveDayNote()">Lưu</button>
+    </div>
+  </div>`;
+}
+function renderEventItem(ev,withDelete){
+  const tag=repeatLabel(ev.repeat);
+  return `<div class="ev-item">
+    <span class="ev-time">${ev.time?esc(ev.time):"•"}</span>
+    <span class="ev-body"><span class="ev-title">${esc(ev.title)}</span>${tag?`<span class="ev-tag">${tag}</span>`:""}</span>
+    ${withDelete?`<button type="button" class="ev-del" onclick="deleteEvent('${esc(ev.id)}')" aria-label="Xoá sự kiện" title="Xoá sự kiện">🗑</button>`:""}
+  </div>`;
+}
+function renderDayEvents(t){
+  const list=eventsOn(t.d,t.m,t.y);
+  return `<div class="card">
+    <div class="note-head"><h3>🎉 Sự kiện ngày này</h3><span class="note-status">${list.length?list.length+" sự kiện":""}</span></div>
+    <div class="ev-list">${list.length?list.map(ev=>renderEventItem(ev,true)).join(""):'<div class="ev-empty">Chưa có sự kiện. Thêm bên dưới để nhắc việc cho ngày này.</div>'}</div>
+    <form class="ev-form" onsubmit="return submitDayEvent(event)">
+      <input id="evTitle" type="text" maxlength="120" placeholder="Tên sự kiện / việc cần làm" required aria-label="Tên sự kiện">
+      <div class="ev-row">
+        <input id="evTime" type="time" aria-label="Giờ (không bắt buộc)">
+        <select id="evRepeat" aria-label="Lặp lại">
+          <option value="none">Không lặp</option>
+          <option value="yearly-solar">Hằng năm (dương lịch)</option>
+          <option value="yearly-lunar">Hằng năm (âm lịch)</option>
+        </select>
+        <button type="submit">Thêm</button>
+      </div>
+      <div class="err" id="evErr"></div>
+    </form>
+  </div>`;
+}
+let noteTimer=null;
+function onNoteInput(){
+  const status=document.getElementById("noteStatus");
+  if(status) status.textContent="Đang lưu…";
+  if(noteTimer) clearTimeout(noteTimer);
+  noteTimer=setTimeout(saveDayNote,600);
+}
+function saveDayNote(){
+  if(noteTimer){ clearTimeout(noteTimer); noteTimer=null; }
+  const ta=document.getElementById("dayNote");
+  if(!ta) return;
+  setNote(selDate.d,selDate.m,selDate.y,ta.value);
+  const status=document.getElementById("noteStatus");
+  if(status) status.textContent=ta.value.trim()?"Đã lưu ✓":"Đã xoá";
+}
+function clearDayNote(){
+  const ta=document.getElementById("dayNote");
+  if(!ta) return;
+  if(ta.value.trim() && !confirm("Xoá ghi chú của ngày này?")) return;
+  ta.value="";
+  setNote(selDate.d,selDate.m,selDate.y,"");
+  const status=document.getElementById("noteStatus");
+  if(status) status.textContent="Đã xoá";
+}
+function submitDayEvent(e){
+  e.preventDefault();
+  const title=document.getElementById("evTitle"), time=document.getElementById("evTime");
+  const repeat=document.getElementById("evRepeat"), errEl=document.getElementById("evErr");
+  if(document.getElementById("dayNote")) saveDayNote(); // giữ ghi chú đang gõ trước khi render lại
+  const res=addEvent(selDate.d,selDate.m,selDate.y,title?title.value:"",time?time.value:"",repeat?repeat.value:"none");
+  if(!res.ok){ if(errEl) errEl.textContent=res.error; return false; }
+  renderApp();
+  return false;
+}
+function deleteEvent(id){
+  if(!confirm("Xoá sự kiện này?")) return;
+  removeEvent(id);
+  renderApp();
 }
 function daysInMonth(m,y){ return new Date(y,m,0).getDate(); }
 function renderMonth(){
@@ -575,8 +829,11 @@ function renderMonth(){
       const isSel=!c.other&&c.d===selDate.d&&m===selDate.m&&y===selDate.y;
       const hs=!c.other&&findHolidaySolar(c.d,m,y);
       const hl=!c.other&&findHolidayLunar(lu.day,lu.month,lu.leap);
+      const hasNote=!c.other&&!!notes[isoOf({d:c.d,m:m,y:y})];
+      const hasEv=!c.other&&eventsOn(c.d,m,y).length>0;
+      const marks=(hasNote||hasEv)?`<div class="marks">${hasNote?'<i class="m-note"></i>':""}${hasEv?'<i class="m-event"></i>':""}</div>`:"";
       const cls=[c.other?"other":"", isToday?"today":"", (hs||hl)?"holiday":"", isSel?"selected":""].join(" ");
-      return `<td class="${cls}" onclick="openDay(${c.d},${m},${y})"><div class="d">${c.d}</div><div class="l">${lu.day}${lu.leap?"n":""}</div></td>`;
+      return `<td class="${cls}" onclick="openDay(${c.d},${m},${y})" title="${hasNote?"Có ghi chú":""}${hasNote&&hasEv?" · ":""}${hasEv?"Có sự kiện":""}"><div class="d">${c.d}</div><div class="l">${lu.day}${lu.leap?"n":""}</div>${marks}</td>`;
     }).join("")+"</tr>";
   }
   return `<div class="card">
@@ -589,7 +846,7 @@ function renderMonth(){
       <tr>${MONTHS_SHORT.map(x=>`<th>${x}</th>`).join("")}</tr>
       ${rows}
     </table>
-    <div class="note">Số nhỏ = ngày âm lịch (n = tháng nhuận). Ô đỏ = ngày lễ. Nhấn vào một ngày để xem chi tiết ngày đó.</div>
+    <div class="note">Số nhỏ = ngày âm lịch (n = tháng nhuận). Ô đỏ = ngày lễ. Chấm đỏ = có ghi chú, chấm vàng = có sự kiện. Nhấn vào một ngày để xem chi tiết ngày đó.</div>
   </div>`;
 }
 function shiftMonth(delta){
@@ -618,7 +875,7 @@ function renderMini(m,y,t){
   }
   return `<div class="mini" onclick="goMonth(${m},${y})"><h4>Tháng ${m}</h4><table>${rows}</table></div>`;
 }
-function goMonth(m,y){ viewMonth=m; viewYear=y; view='month'; clearHash(); renderApp(); }
+function goMonth(m,y){ viewMonth=m; viewYear=y; view='month'; clearHash(); clearViewParam(); renderApp(); }
 function renderYear(){
   const t=todayVN();
   let grid="";
@@ -723,7 +980,174 @@ function renderHolidays(){
   </div>`;
 }
 
-const APP_VERSION="1.1.0";
+const APP_VERSION="1.2.0";
+function renderNotes(){
+  const t=todayVN();
+  const upcoming=upcomingEvents(t,30);
+  const noteKeys=Object.keys(notes).sort().reverse();
+  const allEvents=events.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.time||"").localeCompare(String(b.time||"")));
+  const fmtDMY=iso=>{const p=parseISO(iso);return p?`${pad2(p.d)}/${pad2(p.m)}/${p.y}`:iso;};
+  return `<div class="card">
+    <h3 style="margin-top:0;">🎉 Sự kiện sắp tới (30 ngày)</h3>
+    <div class="ev-list">${upcoming.length?upcoming.map(x=>`<div class="ev-item">
+      <span class="ev-time">${pad2(x.d)}/${pad2(x.m)}</span>
+      <span class="ev-body"><span class="ev-title">${esc(x.ev.title)}</span><span class="ev-tag">${x.ev.time?esc(x.ev.time)+" · ":""}${repeatLabel(x.ev.repeat)||"Một lần"}</span></span>
+      <button type="button" class="ev-del" onclick="deleteEvent('${esc(x.ev.id)}')" aria-label="Xoá sự kiện" title="Xoá sự kiện">🗑</button>
+    </div>`).join(""):'<div class="ev-empty">Chưa có sự kiện nào trong 30 ngày tới.</div>'}</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">➕ Thêm sự kiện</h3>
+    <form class="ev-form" onsubmit="return submitQuickEvent(event)">
+      <input id="qevDate" type="date" value="${isoOf(t)}" min="1800-01-01" max="2199-12-31" required aria-label="Ngày diễn ra">
+      <input id="qevTitle" type="text" maxlength="120" placeholder="Tên sự kiện / việc cần làm" required aria-label="Tên sự kiện">
+      <div class="ev-row">
+        <input id="qevTime" type="time" aria-label="Giờ (không bắt buộc)">
+        <select id="qevRepeat" aria-label="Lặp lại">
+          <option value="none">Không lặp</option>
+          <option value="yearly-solar">Hằng năm (dương lịch)</option>
+          <option value="yearly-lunar">Hằng năm (âm lịch)</option>
+        </select>
+        <button type="submit">Thêm</button>
+      </div>
+      <div class="err" id="qevErr"></div>
+    </form>
+    <div class="note">Sự kiện lưu trên thiết bị này và hiển thị trong ngày, lịch tháng và tiện ích.</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">📝 Ghi chú đã lưu</h3>
+    <div class="ev-list">${noteKeys.length?noteKeys.map(k=>{
+      const p=parseISO(k); if(!p) return "";
+      const text=notes[k];
+      return `<div class="ev-item">
+        <span class="ev-time">${pad2(p.d)}/${pad2(p.m)}</span>
+        <button type="button" class="note-open" onclick="openDay(${p.d},${p.m},${p.y})">
+          <b>${pad2(p.d)}/${pad2(p.m)}/${p.y}</b>
+          <span class="note-snippet">${esc(text.length>140?text.slice(0,140)+"…":text)}</span>
+        </button>
+        <button type="button" class="ev-del" onclick="deleteNote('${k}')" aria-label="Xoá ghi chú" title="Xoá ghi chú">🗑</button>
+      </div>`;
+    }).join(""):'<div class="ev-empty">Chưa có ghi chú. Mở một ngày để thêm ghi chú.</div>'}</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">📋 Tất cả sự kiện</h3>
+    <div class="ev-list">${allEvents.length?allEvents.map(ev=>`<div class="ev-item">
+      <span class="ev-time">${fmtDMY(ev.date).slice(0,5)}</span>
+      <span class="ev-body"><span class="ev-title">${esc(ev.title)}</span><span class="ev-tag">${fmtDMY(ev.date)}${ev.time?" · "+esc(ev.time):""}${ev.repeat!=="none"?" · "+repeatLabel(ev.repeat):""}</span></span>
+      <button type="button" class="ev-del" onclick="deleteEvent('${esc(ev.id)}')" aria-label="Xoá sự kiện" title="Xoá sự kiện">🗑</button>
+    </div>`).join(""):'<div class="ev-empty">Chưa có sự kiện nào.</div>'}</div>
+  </div>`;
+}
+function submitQuickEvent(e){
+  e.preventDefault();
+  const dateEl=document.getElementById("qevDate"), titleEl=document.getElementById("qevTitle");
+  const timeEl=document.getElementById("qevTime"), repeatEl=document.getElementById("qevRepeat");
+  const errEl=document.getElementById("qevErr");
+  const p=parseISO(dateEl?dateEl.value:"");
+  if(!p){ if(errEl) errEl.textContent="Ngày không hợp lệ."; return false; }
+  const res=addEvent(p.d,p.m,p.y,titleEl?titleEl.value:"",timeEl?timeEl.value:"",repeatEl?repeatEl.value:"none");
+  if(!res.ok){ if(errEl) errEl.textContent=res.error; return false; }
+  renderApp();
+  return false;
+}
+function deleteNote(key){
+  if(!confirm("Xoá ghi chú này?")) return;
+  delete notes[key];
+  saveStore(NOTES_KEY,notes);
+  renderApp();
+}
+function widgetInner(t,forPip){
+  const lu=convertSolar2Lunar(t.d,t.m,t.y);
+  const tk=getTietKhiInfo(t.d,t.m,t.y);
+  const note=getNote(t.d,t.m,t.y);
+  const evs=eventsOn(t.d,t.m,t.y);
+  const upcoming=upcomingEvents(t,10).filter(x=>!(x.d===t.d&&x.m===t.m&&x.y===t.y));
+  const fmt=(a)=>a?`${pad2(a[0])}/${pad2(a[1])}`:"?";
+  const dow=new Date(t.y,t.m-1,t.d).getDay();
+  return `<div class="w-top"><span>${DOW[dow]}</span><span class="w-clock" id="${forPip?"pipClock":"wClock"}">${clockText()}</span></div>
+    <div class="w-main">
+      <div class="w-big">${t.d}</div>
+      <div class="w-meta">
+        <div>Tháng ${t.m} · ${t.y}</div>
+        <div class="w-lunar">${lu.day}${lu.leap?" (nhuận)":""}/${lu.month} âm · ${canChiYear(lu.year)}</div>
+      </div>
+    </div>
+    <div class="w-line">Ngày ${canChiDay(t.d,t.m,t.y)} · Tiết <b>${tk.name}</b> (từ ${fmt(tk.start)}) · ${tk.nextName} từ ${fmt(tk.nextStart)}</div>
+    ${note?`<div class="w-note">📝 ${esc(note)}</div>`:""}
+    ${evs.length?`<div class="w-ev"><b>Hôm nay</b>${evs.map(ev=>renderEventItem(ev,false)).join("")}</div>`:""}
+    ${upcoming.length?`<div class="w-ev"><b>Sắp tới</b><ul class="w-up">${upcoming.slice(0,5).map(x=>`<li><span>${pad2(x.d)}/${pad2(x.m)}</span> ${esc(x.ev.title)}</li>`).join("")}</ul></div>`:""}`;
+}
+function renderWidget(){
+  const t=todayVN();
+  return `<div class="card widget">
+    ${widgetInner(t,false)}
+    <div class="w-actions">
+      ${widgetStandalone
+        ?'<a class="w-link" href="./?view=today">Mở ứng dụng</a>'
+        :`<button type="button" onclick="goToday()">Mở ngày hôm nay</button>`}
+      <button type="button" class="primary" onclick="openFloatingWidget()">🪟 Cửa sổ nổi</button>
+      <a class="w-link" href="./?view=notes">Ghi chú &amp; sự kiện</a>
+    </div>
+    <div class="note" id="widgetHint" hidden>Trình duyệt này không hỗ trợ cửa sổ nổi (Document Picture-in-Picture). Trên điện thoại, hãy thêm ứng dụng vào Màn hình chính rồi mở lối tắt “Tiện ích hôm nay”.</div>
+    <div class="note">Chế độ tiện ích hiển thị gọn ngày hôm nay cùng ghi chú, sự kiện và lịch sắp tới. Trình duyệt web không thể tạo widget gốc trên màn hình chính Android/iOS; hãy dùng lối tắt PWA hoặc cửa sổ nổi trên máy tính.</div>
+  </div>`;
+}
+function tickClock(){
+  const el=document.getElementById("wClock");
+  if(el) el.textContent=clockText();
+}
+setInterval(tickClock,20000);
+let pipWin=null;
+async function openFloatingWidget(){
+  const hint=document.getElementById("widgetHint");
+  if(!("documentPictureInPicture" in window)){
+    if(hint){ hint.hidden=false; }
+    return;
+  }
+  try{
+    if(pipWin&&!pipWin.closed){ pipWin.focus(); return; }
+    pipWin=await window.documentPictureInPicture.requestWindow({width:340,height:420});
+    const doc=pipWin.document;
+    doc.head.innerHTML='<meta charset="utf-8"><title>Lịch Việt Nam — Tiện ích</title>';
+    const style=doc.createElement("style");
+    style.textContent=`*{box-sizing:border-box}body{margin:0;padding:14px;background:#f7f5f0;color:#1f2320;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.4}
+      #pipRoot{position:relative}
+      #pipRoot::before{content:"";position:absolute;left:0;right:0;top:-14px;height:4px;background:#b5442e}
+      .w-top{display:flex;justify-content:space-between;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#6b7168}
+      .w-main{display:flex;align-items:center;gap:14px;margin-top:4px}
+      .w-big{font-size:72px;font-weight:700;line-height:.9;color:#b5442e}
+      .w-meta{font-size:14px}
+      .w-lunar{font-size:15px;color:#b5442e;font-weight:600;margin-top:3px}
+      .w-line{font-size:12px;color:#6b7168;margin-top:8px}
+      .w-note{margin-top:8px;background:#fff;border:1px solid #e7e2d8;border-left:3px solid #b5442e;border-radius:8px;padding:8px 10px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+      .w-ev{margin-top:10px;font-size:13px}
+      .w-ev>b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#6b7168;margin-bottom:2px}
+      .ev-item{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid #e7e2d8;font-size:13px}
+      .ev-item:last-child{border-bottom:none}
+      .ev-time{font-weight:600;color:#b5442e;min-width:42px}
+      .ev-title{overflow-wrap:anywhere}
+      .ev-tag{display:block;font-size:11px;color:#6b7168}
+      .w-up{list-style:none;margin:0;padding:0;font-size:12px}
+      .w-up li{display:flex;gap:8px;padding:2px 0}
+      .w-up li span{color:#b5442e;font-weight:600;min-width:36px}
+      .pip-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px}
+      .pip-foot button{background:#b5442e;border:0;border-radius:8px;color:#fff;padding:6px 10px;font-weight:600;cursor:pointer}
+      .pip-foot a{color:#b5442e;font-weight:600;text-decoration:none}`;
+    doc.head.appendChild(style);
+    const root=doc.createElement("div");
+    root.id="pipRoot";
+    doc.body.appendChild(root);
+    const paint=()=>{
+      root.innerHTML=widgetInner(todayVN(),true)+'<div class="pip-foot"><button type="button" id="pipRefresh">↻ Cập nhật</button><a href="./?view=widget" target="_blank" rel="noopener">Mở rộng</a></div>';
+      const b=root.querySelector("#pipRefresh");
+      if(b) b.addEventListener("click",paint);
+    };
+    paint();
+    pipWin.addEventListener("pagehide",()=>{ pipWin=null; });
+  }catch(err){
+    if(hint){ hint.hidden=false; hint.textContent="Không mở được cửa sổ nổi"+(err&&err.message?": "+err.message:"."); }
+  }
+}
+
 function holidayYearText(){
   const years=window.VN_HOLIDAY_SCHEDULE ? Object.keys(window.VN_HOLIDAY_SCHEDULE).sort() : [];
   if(!years.length) return "những năm đã có thông báo";
@@ -753,6 +1177,8 @@ function renderAbout(){
       <li>Chuyển đổi Dương lịch ↔ Âm lịch, hiển thị tháng nhuận.</li>
       <li>Can Chi ngày – tháng – năm, 24 tiết khí, giờ Hoàng đạo và pha Mặt Trăng (ước tính).</li>
       <li>Lịch tháng, lịch năm cùng danh sách ngày lễ, Tết Việt Nam.</li>
+      <li><b>Ghi chú theo ngày</b> và <b>sự kiện</b> (giờ, lặp hằng năm theo dương lịch hoặc âm lịch), lưu trên thiết bị và đánh dấu trên lịch tháng.</li>
+      <li><b>Chế độ tiện ích</b> hiển thị gọn hôm nay cùng ghi chú, sự kiện và lịch sắp tới; hỗ trợ cửa sổ nổi trên trình duyệt tương thích và lối tắt PWA.</li>
       <li>Liên kết trực tiếp tới một ngày dạng <code>#ngay=YYYY-MM-DD</code> để lưu hoặc chia sẻ.</li>
       <li>Giao diện sáng/tối, responsive, cài đặt như ứng dụng và dùng được khi offline.</li>
     </ul>
@@ -777,8 +1203,10 @@ function renderAbout(){
     <ul>
       <li>Không yêu cầu tài khoản, không có backend và không gửi nội dung tra cứu lên máy chủ.</li>
       <li>Không dùng analytics, quảng cáo hay mã theo dõi bên thứ ba.</li>
-      <li><code>localStorage</code> chỉ lưu lựa chọn giao diện sáng/tối; Service Worker lưu bản offline của ứng dụng.</li>
+      <li><code>localStorage</code> lưu lựa chọn giao diện sáng/tối và <b>ghi chú, sự kiện do bạn tạo</b>; dữ liệu chỉ nằm trên thiết bị/trình duyệt này, không được đồng bộ lên máy chủ.</li>
+      <li>Service Worker lưu bản offline của ứng dụng.</li>
       <li>Ngày đang xem được ghi trên URL (<code>#ngay=...</code>) để chia sẻ, không phải dữ liệu cá nhân gửi đi đâu.</li>
+      <li>Xoá dữ liệu trình duyệt hoặc gỡ ứng dụng có thể xoá ghi chú/sự kiện đã lưu; hãy sao lưu nếu cần.</li>
     </ul>
   </div>
   <div class="card about">
@@ -788,7 +1216,8 @@ function renderAbout(){
       <li><b>iOS / Safari:</b> bấm nút Chia sẻ → “Thêm vào MH chính”.</li>
       <li><b>Máy tính:</b> bấm biểu tượng cài đặt trên thanh địa chỉ của Chrome/Edge.</li>
     </ul>
-    <p>Sau khi cài, ứng dụng mở như một cửa sổ riêng và vẫn dùng được khi không có mạng.</p>
+    <p>Sau khi cài, ứng dụng mở như một cửa sổ riêng và vẫn dùng được khi không có mạng. Nhấn giữ biểu tượng ứng dụng để thấy các lối tắt “Hôm nay”, “Ghi chú &amp; sự kiện”, “Tiện ích hôm nay”.</p>
+    <p class="disclaimer">Trình duyệt web/PWA không thể đăng ký widget gốc trên màn hình chính Android/iOS. Chế độ Tiện ích mở như một cửa sổ gọn; trên máy tính tương thích còn có thể mở cửa sổ nổi luôn hiển thị trên màn hình.</p>
   </div>
   <div class="card about">
     <h3 style="margin-top:0;">🔗 Liên kết &amp; góp ý</h3>
@@ -802,6 +1231,7 @@ function renderAbout(){
 }
 
 function renderApp(){
+  document.body.classList.toggle("widget-mode", view==="widget"&&widgetStandalone);
   document.querySelectorAll('#navMenu button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));
   const main=document.getElementById('main');
   if(view==='today') main.innerHTML=renderDay();
@@ -809,6 +1239,8 @@ function renderApp(){
   else if(view==='year') main.innerHTML=renderYear();
   else if(view==='convert') main.innerHTML=renderConvert();
   else if(view==='holidays') main.innerHTML=renderHolidays();
+  else if(view==='notes') main.innerHTML=renderNotes();
+  else if(view==='widget') main.innerHTML=renderWidget();
   else if(view==='about') main.innerHTML=renderAbout();
 }
 const navMenu=document.getElementById('navMenu'), hamBtn=document.getElementById('hamBtn');
@@ -818,7 +1250,7 @@ navMenu.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
   const v=b.dataset.v;
   if(v==='today'){ const t=todayVN(); setSelected(t.d,t.m,t.y); }
-  else { view=v; clearHash(); renderApp(); }
+  else { view=v; clearHash(); clearViewParam(); renderApp(); }
   closeMenu();
 });
 document.addEventListener('click',()=>closeMenu());
@@ -851,6 +1283,12 @@ function readHashDate(){
   const m=/ngay=(\d{4})-(\d{2})-(\d{2})/.exec(location.hash||"");
   if(m) setSelected(+m[3],+m[2],+m[1],false);
 }
+function applyQueryView(){
+  let v=null;
+  try{ v=new URLSearchParams(location.search).get("view"); }catch(e){}
+  const allowed=["today","month","year","convert","holidays","notes","widget","about"];
+  if(v&&allowed.indexOf(v)>=0){ view=v; widgetStandalone=(v==="widget"); }
+}
 window.addEventListener('hashchange',readHashDate);
 document.addEventListener('keydown',e=>{
   if(view!=='today'||e.ctrlKey||e.metaKey||e.altKey) return;
@@ -859,6 +1297,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'){ e.preventDefault(); shiftDay(-1); }
   else if(e.key==='ArrowRight'){ e.preventDefault(); shiftDay(1); }
 });
+applyQueryView();
 readHashDate();
 renderApp();
 if('serviceWorker' in navigator){
