@@ -44,6 +44,7 @@ Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam t
 - 🎉 Tra cứu ngày nghỉ lễ, Tết theo từng năm và phân biệt với ngày kỷ niệm/phong tục.
 - 🇻🇳 Có dữ liệu lịch nghỉ cụ thể năm 2026, gồm Tết, Giỗ Tổ, 30/4, 1/5, Quốc khánh và Ngày Văn hóa Việt Nam.
 - 🗓️ Xem lịch tháng và lịch năm.
+- ℹ️ Tab Giới thiệu: phiên bản, tính năng, lịch pháp, quyền riêng tư, hướng dẫn cài đặt và liên kết.
 - 🌓 Giao diện sáng/tối.
 - 📱 Responsive cho điện thoại, máy tính bảng và máy tính.
 - 📲 Hỗ trợ PWA, Service Worker và biểu tượng cài đặt.
