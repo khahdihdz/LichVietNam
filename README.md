@@ -20,8 +20,10 @@
 | **Chạy** | Trình duyệt hiện đại, Android, iOS, máy tính |
 | **Offline** | Có, thông qua Service Worker |
 | **Backend** | Không yêu cầu |
-| **Trang web** | https://khahdihdz.github.io |
+| **Trang web** | https://lichvn.pages.dev |
+| **GitHub Pages** | https://khahdihdz.github.io/LichVietNam/ |
 | **Mã nguồn** | https://github.com/khahdihdz/LichVietNam |
+| **Triển khai** | Cloudflare Pages + GitHub Actions Pages |
 
 ### 🧭 Phạm vi dự án
 
@@ -29,7 +31,7 @@ Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam t
 
 ### 📲 PWA & chia sẻ
 
-Ứng dụng có Web App Manifest, Service Worker, biểu tượng cài đặt và metadata Open Graph/Twitter Card để hiển thị tiêu đề, mô tả và hình ảnh khi chia sẻ liên kết trên các nền tảng hỗ trợ.
+Ứng dụng có Web App Manifest, Service Worker, biểu tượng cài đặt và metadata Open Graph/Twitter Card để hiển thị tiêu đề, mô tả và ảnh thumbnail `og-image.png` (1200×630) khi chia sẻ liên kết trên các nền tảng hỗ trợ. Workflow GitHub Pages tự đóng dấu commit hiện tại vào `index.html` và tạo `version.json`, đồng thời thêm `?v=<commit>` vào URL ảnh chia sẻ để crawler lấy đúng bản mới.
 
 ## ✨ Tính năng
 
@@ -46,7 +48,7 @@ Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam t
 - 🗓️ Xem lịch tháng và lịch năm.
 - ℹ️ Tab Giới thiệu: phiên bản, tính năng, lịch pháp, quyền riêng tư, hướng dẫn cài đặt và liên kết.
 - 📝 Ghi chú theo từng ngày và sự kiện có giờ, hỗ trợ lặp hằng năm theo dương lịch hoặc âm lịch; đánh dấu trên lịch tháng.
-- 🧩 Chế độ Tiện ích: giao diện gọn cho hôm nay, cửa sổ nổi (Document Picture-in-Picture) trên trình duyệt tương thích và lối tắt PWA.
+- 🪟 Widget: giao diện gọn cho hôm nay trong cửa sổ nổi (Document Picture-in-Picture). Tính năng chỉ xuất hiện trên trình duyệt hỗ trợ; trình duyệt không hỗ trợ sẽ ẩn mục này.
 - 🌓 Giao diện sáng/tối.
 - 📱 Responsive cho điện thoại, máy tính bảng và máy tính.
 - 📲 Hỗ trợ PWA, Service Worker và biểu tượng cài đặt.
@@ -63,24 +65,39 @@ Trang đầu mặc định hiển thị hôm nay. Để xem một ngày khác:
 Ngày đang xem được ghi lên URL dưới dạng `#ngay=YYYY-MM-DD`, ví dụ:
 
 ```
-https://khahdihdz.github.io/#ngay=2026-10-05
+https://lichvn.pages.dev/#ngay=2026-10-05
 ```
 
 Nhờ đó có thể lưu, chia sẻ hoặc mở lại đúng ngày; khi chuyển sang các mục khác, phần hash được xoá. Mọi thông tin (âm lịch, Can Chi, tiết khí, giờ Hoàng đạo, ngày lễ) đều được tính lại theo ngày đã chọn.
 
-## 📝 Ghi chú, sự kiện và chế độ Tiện ích
+## 📝 Ghi chú, sự kiện và Widget
 
 - **Ghi chú**: mở một ngày bất kỳ, nhập vào ô “Ghi chú ngày…” và bấm Lưu (hoặc để tự lưu sau khi ngừng gõ). Ghi chú được đánh dấu bằng chấm đỏ nhỏ trên lịch tháng và liệt kê trong tab **Ghi chú & sự kiện**.
 - **Sự kiện**: thêm ngay trong trang ngày hoặc trong tab **Ghi chú & sự kiện**, có thể kèm giờ và chọn lặp:
   - Không lặp,
   - Hằng năm theo dương lịch,
   - Hằng năm theo âm lịch (dùng ngày/tháng âm của ngày tạo).
-- **Chế độ Tiện ích** (`?view=widget` hoặc tab 🧩 Tiện ích): hiển thị gọn ngày hôm nay, Can Chi, tiết khí, ghi chú, sự kiện trong ngày và lịch sắp tới.
-  - Trên Chrome/Edge máy tính có thể mở **cửa sổ nổi** luôn hiển thị (Document Picture-in-Picture).
-  - Trên điện thoại, thêm ứng dụng vào Màn hình chính và dùng lối tắt **“Tiện ích hôm nay”** (manifest shortcuts).
+- **Widget** (`?view=widget` hoặc tab 🪟 Widget): hiển thị gọn ngày hôm nay, Can Chi, tiết khí, ghi chú, sự kiện trong ngày và lịch sắp tới.
+  - Chỉ hiển thị khi trình duyệt hỗ trợ **Document Picture-in-Picture** (Chrome/Edge máy tính). Trên trình duyệt không hỗ trợ, mục Widget và lối tắt tương ứng bị ẩn/loại bỏ.
+  - Nút **Cửa sổ nổi** mở widget luôn hiển thị trên màn hình, có nút cập nhật nội dung.
 - Dữ liệu ghi chú/sự kiện chỉ lưu trong `localStorage` của trình duyệt trên thiết bị, không gửi lên máy chủ và không đồng bộ giữa các thiết bị.
 
-> Widget gốc trên màn hình chính Android/iOS cần ứng dụng native hoặc lớp đóng gói; PWA thuần web không đăng ký được widget hệ điều hành. Chế độ Tiện ích và cửa sổ nổi là cách hiển thị gần nhất mà không cần backend/native.
+> Widget gốc trên màn hình chính Android/iOS cần ứng dụng native hoặc lớp đóng gói; PWA thuần web không đăng ký được widget hệ điều hành. Vì vậy dự án chỉ cung cấp widget cửa sổ nổi khi trình duyệt hỗ trợ, thay vì hiển thị một mục không dùng được.
+
+## 🚀 Triển khai & thông tin bản dựng
+
+Dự án được triển khai ở hai nơi:
+
+- **Cloudflare Pages**: https://lichvn.pages.dev — bản chính.
+- **GitHub Pages**: https://khahdihdz.github.io/LichVietNam/ — workflow `.github/workflows/pages.yml`.
+
+Workflow GitHub Pages chạy khi push lên `main`:
+
+1. Chạy `node --test calendar-engine.test.js`.
+2. Chạy `scripts/stamp-build.js` để điền commit, thời điểm và nội dung commit vào các thẻ `<meta name="app-build-*">`, thêm `?v=<commit>` vào ảnh chia sẻ và tạo `version.json`.
+3. Upload artifact tĩnh và deploy bằng `actions/deploy-pages`.
+
+Tab **Giới thiệu** đọc thông tin bản dựng từ các thẻ meta ở trên. Nếu `version.json` không có (ví dụ bản Cloudflare), ứng dụng gọi GitHub API công khai một lần và lưu cache 10 phút để hiển thị commit gần nhất; khi offline hoặc API lỗi, thông tin bản dựng chỉ hiển thị “đang cập nhật…”.
 
 ## 🧮 Thuật toán lịch Âm
 
@@ -140,7 +157,9 @@ Không nên mở trực tiếp bằng `file://` nếu muốn kiểm tra đầy �
 
 ```
 LichVietNam/
-├── .github/              # GitHub Actions / cấu hình dự án
+├── .github/workflows/    # CI và Deploy GitHub Pages
+├── scripts/
+│   └── stamp-build.js    # Đóng dấu commit + tạo version.json khi deploy
 ├── calendar-engine.js    # Engine lịch Âm – Dương có thể tái sử dụng
 ├── calendar-engine.test.js
 ├── index.html             # Giao diện web/PWA
@@ -149,6 +168,7 @@ LichVietNam/
 ├── sw.js                  # Service Worker
 ├── icon-192.png           # Icon PWA 192×192
 ├── icon-512.png           # Icon PWA 512×512
+├── og-image.png           # Ảnh chia sẻ 1200×630
 ├── robots.txt
 ├── sitemap.xml
 ├── LICENSE               # MIT License
@@ -159,7 +179,7 @@ LichVietNam/
 
 Ứng dụng không yêu cầu tài khoản và không cần máy chủ backend để thực hiện việc tính lịch. Việc chuyển đổi ngày được thực hiện trên thiết bị của người dùng. Ghi chú và sự kiện do người dùng tạo chỉ lưu trong `localStorage` trên thiết bị/trình duyệt hiện tại; xoá dữ liệu trình duyệt hoặc gỡ ứng dụng có thể xoá các dữ liệu này.
 
-Nếu triển khai phiên bản có thêm analytics, quảng cáo hoặc dịch vụ bên thứ ba, phần triển khai đó cần công bố rõ trong tài liệu và chính sách riêng.
+Tab Giới thiệu có thể gọi GitHub API công khai (`api.github.com`) để lấy commit gần nhất khi `version.json` không tồn tại; request này không gửi nội dung ghi chú, sự kiện hay dữ liệu cá nhân. Nếu triển khai phiên bản có thêm analytics, quảng cáo hoặc dịch vụ bên thứ ba khác, phần triển khai đó cần công bố rõ trong tài liệu và chính sách riêng.
 
 ## 🤝 Đóng góp
 
@@ -198,4 +218,4 @@ MIT cho phép sử dụng, sao chép, sửa đổi, phân phối và sử dụng
 
 ---
 
-**Lịch Việt Nam** · [khahdihdz.github.io](https://khahdihdz.github.io)
+**Lịch Việt Nam** · [lichvn.pages.dev](https://lichvn.pages.dev) · [GitHub Pages](https://khahdihdz.github.io/LichVietNam/)
