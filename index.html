@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Tra cứu lịch Âm Dương Việt Nam, Can Chi, tiết khí, giờ Hoàng đạo và ngày lễ — hoạt động offline, không dùng lịch Trung Quốc đổi tên.">
+<meta name="description" content="Tra cứu lịch Âm Dương Việt Nam cho bất kỳ ngày nào: Can Chi, tiết khí, giờ Hoàng đạo và ngày lễ — hoạt động offline, không dùng lịch Trung Quốc đổi tên.">
 <meta property="og:title" content="Lịch Việt Nam - Lịch Âm Dương Việt Nam">
-<meta property="og:description" content="Tra cứu lịch Âm Dương Việt Nam, Can Chi, tiết khí và ngày lễ.">
+<meta property="og:description" content="Tra cứu lịch Âm Dương Việt Nam cho bất kỳ ngày nào: Can Chi, tiết khí và ngày lễ.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lịch Việt Nam">
 <meta property="og:locale" content="vi_VN">
@@ -198,6 +198,43 @@ footer a:hover{text-decoration:underline;}
 .hero + .note{
   font-size:clamp(12px,calc(8px + .8vw + .1vh),17px);
   line-height:1.5;
+}
+
+/* ---------- Tra cứu ngày bất kỳ ---------- */
+.daynav{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;margin-bottom:clamp(6px,1.5vw,12px);
+}
+.daynav button{
+  flex:0 0 auto;background:var(--bg);border:1px solid var(--line);color:var(--text);
+  width:clamp(38px,9vw,46px);height:clamp(38px,9vw,46px);
+  border-radius:10px;font-size:clamp(18px,4vw,22px);line-height:1;cursor:pointer;
+}
+.daynav button:hover,.daynav button:focus-visible{border-color:var(--accent);color:var(--accent);outline:none;}
+.daynav input[type="date"]{
+  flex:1 1 auto;min-width:0;max-width:260px;
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--text);
+  padding:clamp(8px,2vw,11px) clamp(10px,2.5vw,14px);
+  font-size:clamp(14px,2.6vw,18px);font-family:inherit;text-align:center;
+  color-scheme:light;
+}
+:root[data-theme="dark"] .daynav input[type="date"]{color-scheme:dark;}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .daynav input[type="date"]{color-scheme:dark;}
+}
+.daybar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:clamp(10px,2vw,16px);}
+.daybar button{
+  background:var(--bg);border:1px solid var(--line);border-radius:999px;color:var(--text);
+  padding:8px 14px;font-size:clamp(12px,2vw,15px);cursor:pointer;
+}
+.daybar button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+table.month td.selected{outline:2px solid var(--accent);outline-offset:-2px;}
+table.month td.today.selected{outline-color:var(--text);}
+.mini td[onclick]{cursor:pointer;}
+.mini td.sel{background:var(--accent);color:#fff;border-radius:4px;}
+.resultbtn{
+  margin-top:10px;background:transparent;border:1px solid var(--accent);color:var(--accent);
+  border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;
 }
 
 </style>
@@ -417,11 +454,47 @@ function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDA
 let view="today";
 const now=new Date();
 let viewYear=now.getFullYear(), viewMonth=now.getMonth()+1;
+let selDate={d:now.getDate(),m:now.getMonth()+1,y:now.getFullYear()};
 
-function todayVN(){ return {d:now.getDate(),m:now.getMonth()+1,y:now.getFullYear(),dow:now.getDay()}; }
+function todayVN(){ const n=new Date(); return {d:n.getDate(),m:n.getMonth()+1,y:n.getFullYear(),dow:n.getDay()}; }
+function isoOf(o){ return o.y+"-"+String(o.m).padStart(2,"0")+"-"+String(o.d).padStart(2,"0"); }
+function isSameDay(a,b){ return a.d===b.d&&a.m===b.m&&a.y===b.y; }
 
-function renderToday(){
-  const t=todayVN();
+/* Đồng bộ ngày đang xem lên URL để có thể chia sẻ / mở lại đúng ngày. */
+function updateHash(){
+  const hash="#ngay="+isoOf(selDate);
+  if(location.hash!==hash){ try{ history.replaceState(null,"",hash); }catch(e){} }
+}
+function clearHash(){
+  if(location.hash){ try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} }
+}
+function setSelected(d,m,y,syncUrl){
+  if(!(y>=1800&&y<=2199)) return false;
+  const dt=new Date(y,m-1,d);
+  if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d) return false;
+  selDate={d:d,m:m,y:y};
+  viewYear=y; viewMonth=m; view="today";
+  if(syncUrl!==false) updateHash();
+  renderApp();
+  return true;
+}
+function openDay(d,m,y){
+  if(!setSelected(d,m,y)) return;
+  try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); }
+}
+function goToday(){ const t=todayVN(); openDay(t.d,t.m,t.y); }
+function shiftDay(delta){
+  const dt=new Date(selDate.y,selDate.m-1,selDate.d+delta);
+  openDay(dt.getDate(),dt.getMonth()+1,dt.getFullYear());
+}
+function onDateInput(value){
+  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||"");
+  if(!m||!setSelected(+m[3],+m[2],+m[1])) renderApp(); // ô chọn ngày quay về ngày đang xem
+}
+
+function renderDay(){
+  const t=selDate;
+  const isToday=isSameDay(t,todayVN());
   const lu=convertSolar2Lunar(t.d,t.m,t.y);
   const hs=findHolidaySolar(t.d,t.m,t.y);
   const hl=findHolidayLunar(lu.day,lu.month,lu.leap);
@@ -429,10 +502,18 @@ function renderToday(){
   const fmt=(a)=>a?`${String(a[0]).padStart(2,'0')}/${String(a[1]).padStart(2,'0')}/${a[2]}`:"?";
   const hd=getHoangDaoHours(t.d,t.m,t.y);
   const moon=getMoonPhase(lu.day);
+  const dd=String(t.d).padStart(2,'0'), mm=String(t.m).padStart(2,'0');
+  const dow=new Date(t.y,t.m-1,t.d).getDay();
   return `<div class="card hero">
-    <div class="dow">${DOW[t.dow]}</div>
+    <div class="daynav">
+      <button type="button" onclick="shiftDay(-1)" aria-label="Ngày trước" title="Ngày trước (←)">‹</button>
+      <input type="date" id="datePicker" value="${isoOf(t)}" min="1800-01-01" max="2199-12-31"
+             onchange="onDateInput(this.value)" aria-label="Chọn ngày cần xem">
+      <button type="button" onclick="shiftDay(1)" aria-label="Ngày sau" title="Ngày sau (→)">›</button>
+    </div>
+    <div class="dow">${DOW[dow]}${isToday?" · Hôm nay":""}</div>
     <div class="big">${t.d}</div>
-    <div class="mo">Tháng ${t.m} · ${t.y} · ${String(t.d).padStart(2,'0')}/${String(t.m).padStart(2,'0')}/${t.y}</div>
+    <div class="mo">Tháng ${t.m} · ${t.y} · ${dd}/${mm}/${t.y}</div>
     <div class="lunar">${lu.day}${lu.leap?" (nhuận)":""}/${lu.month} âm lịch — năm ${canChiYear(lu.year)}</div>
     <div class="canchi">Ngày ${canChiDay(t.d,t.m,t.y)} · Tháng ${canChiMonth(lu.month,lu.year)} · Năm ${canChiYear(lu.year)}</div>
     ${(hs||hl)?`<div class="canchi">🎉 ${hs?hs.name:hl.name}</div>`:""}
@@ -445,8 +526,13 @@ function renderToday(){
     <div class="tietkhi">Tiết khí: <b>${tk.name}</b> (từ ${fmt(tk.start)}) · Tiếp theo: <b>${tk.nextName}</b> (${fmt(tk.nextStart)})</div>
     <div class="tietkhi">Mặt trăng: <b>${moon.name}</b> (ngày ${moon.age} âm lịch)</div>
     <div class="tietkhi">Giờ Hoàng đạo: <b>${hd.map(c=>`${c} (${CHI_HOUR[c]})`).join(", ")}</b></div>
+    <div class="daybar">
+      <button type="button" onclick="goMonth(${t.m},${t.y})">📅 Lịch tháng ${t.m}/${t.y}</button>
+      ${isToday?"":'<button type="button" class="primary" onclick="goToday()">🏠 Về hôm nay</button>'}
+    </div>
   </div>
-  <div class="note">Nội dung được tính tự động theo ngày hiện tại tại Việt Nam (UTC+7). Ngày 05/10/2026 tương ứng 25/08 năm Bính Ngọ, ngày Nhâm Tý, tiết Thu phân. Giờ Hoàng đạo gồm Tý, Sửu, Mão, Ngọ, Thân, Dậu.</div>`;
+  <div class="note">${isToday?`Đang xem hôm nay (${dd}/${mm}/${t.y}).`:`Đang xem ngày ${dd}/${mm}/${t.y} — không phải hôm nay.`}
+  Chọn ngày ở ô phía trên, dùng phím ← → hoặc nhấn vào một ngày trong lịch tháng để tra cứu bất kỳ ngày nào (1800–2199).</div>`;
 }
 function daysInMonth(m,y){ return new Date(y,m,0).getDate(); }
 function renderMonth(){
@@ -466,10 +552,11 @@ function renderMonth(){
       if(c.other){ if(cells.indexOf(c)<startDow){ m=viewMonth-1===0?12:viewMonth-1; y=viewMonth-1===0?viewYear-1:viewYear; } else { m=viewMonth+1===13?1:viewMonth+1; y=viewMonth+1===13?viewYear+1:viewYear; } }
       const lu=convertSolar2Lunar(c.d,m,y);
       const isToday=!c.other&&c.d===t.d&&m===t.m&&y===t.y;
+      const isSel=!c.other&&c.d===selDate.d&&m===selDate.m&&y===selDate.y;
       const hs=!c.other&&findHolidaySolar(c.d,m,y);
       const hl=!c.other&&findHolidayLunar(lu.day,lu.month,lu.leap);
-      const cls=[c.other?"other":"", isToday?"today":"", (hs||hl)?"holiday":""].join(" ");
-      return `<td class="${cls}"><div class="d">${c.d}</div><div class="l">${lu.day}${lu.leap?"n":""}</div></td>`;
+      const cls=[c.other?"other":"", isToday?"today":"", (hs||hl)?"holiday":"", isSel?"selected":""].join(" ");
+      return `<td class="${cls}" onclick="openDay(${c.d},${m},${y})"><div class="d">${c.d}</div><div class="l">${lu.day}${lu.leap?"n":""}</div></td>`;
     }).join("")+"</tr>";
   }
   return `<div class="card">
@@ -482,7 +569,7 @@ function renderMonth(){
       <tr>${MONTHS_SHORT.map(x=>`<th>${x}</th>`).join("")}</tr>
       ${rows}
     </table>
-    <div class="note">Số nhỏ = ngày âm lịch (n = tháng nhuận). Ô đỏ = ngày lễ.</div>
+    <div class="note">Số nhỏ = ngày âm lịch (n = tháng nhuận). Ô đỏ = ngày lễ. Nhấn vào một ngày để xem chi tiết ngày đó.</div>
   </div>`;
 }
 function shiftMonth(delta){
@@ -505,12 +592,13 @@ function renderMini(m,y,t){
     rows+="<tr>"+cells.slice(i,i+7).map(d=>{
       if(d===null) return `<td class="other"></td>`;
       const isToday=d===t.d&&m===t.m&&y===t.y;
-      return `<td class="${isToday?'today':''}">${d}</td>`;
+      const isSel=d===selDate.d&&m===selDate.m&&y===selDate.y;
+      return `<td class="${isToday?'today':''}${isSel?' sel':''}" onclick="event.stopPropagation();openDay(${d},${m},${y})">${d}</td>`;
     }).join("")+"</tr>";
   }
   return `<div class="mini" onclick="goMonth(${m},${y})"><h4>Tháng ${m}</h4><table>${rows}</table></div>`;
 }
-function goMonth(m,y){ viewMonth=m; viewYear=y; view='month'; renderApp(); }
+function goMonth(m,y){ viewMonth=m; viewYear=y; view='month'; clearHash(); renderApp(); }
 function renderYear(){
   const t=todayVN();
   let grid="";
@@ -522,7 +610,7 @@ function renderYear(){
       <button onclick="shiftYear(1)">Năm sau ›</button>
     </div>
     <div class="yeargrid">${grid}</div>
-    <div class="note">Nhấn vào một tháng để xem chi tiết lịch tháng (kèm ngày âm, Can Chi, ngày lễ).</div>
+    <div class="note">Nhấn vào một tháng để xem lịch tháng, nhấn vào một ngày để mở chi tiết ngày đó (kèm ngày âm, Can Chi, ngày lễ).</div>
   </div>`;
 }
 
@@ -561,7 +649,7 @@ function doS2L(e){
   const el=document.getElementById('convResult');
   if(d<1||d>31||m<1||m>12){ el.innerHTML='<div class="err">Ngày không hợp lệ. Vui lòng kiểm tra lại ngày, tháng và năm.</div>'; return false; }
   const lu=convertSolar2Lunar(d,m,y);
-  el.innerHTML=`<div class="result">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}<br>↓<br><b>${lu.day}/${lu.month}${lu.leap?' (nhuận)':''}/${canChiYear(lu.year)}</b></div>`;
+  el.innerHTML=`<div class="result">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}<br>↓<br><b>${lu.day}/${lu.month}${lu.leap?' (nhuận)':''}/${canChiYear(lu.year)}</b><br><button type="button" class="resultbtn" onclick="openDay(${d},${m},${y})">Xem chi tiết ngày này</button></div>`;
   return false;
 }
 function doL2S(e){
@@ -571,7 +659,7 @@ function doL2S(e){
   const el=document.getElementById('convResult');
   const r=convertLunar2Solar(d,m,y,leap);
   if(!r || d<1 || d>30){ el.innerHTML='<div class="err">Ngày âm lịch này không tồn tại trong năm đã chọn.</div>'; return false; }
-  el.innerHTML=`<div class="result">${d}/${m}${leap?' (nhuận)':''} âm<br>↓<br><b>${String(r[0]).padStart(2,'0')}/${String(r[1]).padStart(2,'0')}/${r[2]}</b></div>`;
+  el.innerHTML=`<div class="result">${d}/${m}${leap?' (nhuận)':''} âm<br>↓<br><b>${String(r[0]).padStart(2,'0')}/${String(r[1]).padStart(2,'0')}/${r[2]}</b><br><button type="button" class="resultbtn" onclick="openDay(${r[0]},${r[1]},${r[2]})">Xem chi tiết ngày này</button></div>`;
   return false;
 }
 
@@ -618,7 +706,7 @@ function renderHolidays(){
 function renderApp(){
   document.querySelectorAll('#navMenu button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));
   const main=document.getElementById('main');
-  if(view==='today') main.innerHTML=renderToday();
+  if(view==='today') main.innerHTML=renderDay();
   else if(view==='month') main.innerHTML=renderMonth();
   else if(view==='year') main.innerHTML=renderYear();
   else if(view==='convert') main.innerHTML=renderConvert();
@@ -629,7 +717,10 @@ function closeMenu(){ navMenu.classList.remove('open'); hamBtn.setAttribute('ari
 hamBtn.addEventListener('click',e=>{ e.stopPropagation(); const open=navMenu.classList.toggle('open'); hamBtn.setAttribute('aria-expanded',open); });
 navMenu.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
-  view=b.dataset.v; renderApp(); closeMenu();
+  const v=b.dataset.v;
+  if(v==='today'){ const t=todayVN(); setSelected(t.d,t.m,t.y); }
+  else { view=v; clearHash(); renderApp(); }
+  closeMenu();
 });
 document.addEventListener('click',()=>closeMenu());
 let deferredInstallPrompt=null;
@@ -655,6 +746,21 @@ function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); t
 let savedTheme='light'; try{ savedTheme=localStorage.getItem('lvn-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); }catch(e){}
 applyTheme(savedTheme);
 themeBtn.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+
+/* ---------- Mở ngày từ URL (#ngay=YYYY-MM-DD) và điều hướng bằng bàn phím ---------- */
+function readHashDate(){
+  const m=/ngay=(\d{4})-(\d{2})-(\d{2})/.exec(location.hash||"");
+  if(m) setSelected(+m[3],+m[2],+m[1],false);
+}
+window.addEventListener('hashchange',readHashDate);
+document.addEventListener('keydown',e=>{
+  if(view!=='today'||e.ctrlKey||e.metaKey||e.altKey) return;
+  const tag=(e.target&&e.target.tagName||"").toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select') return;
+  if(e.key==='ArrowLeft'){ e.preventDefault(); shiftDay(-1); }
+  else if(e.key==='ArrowRight'){ e.preventDefault(); shiftDay(1); }
+});
+readHashDate();
 renderApp();
 if('serviceWorker' in navigator){
   let reloadingAfterUpdate=false;
