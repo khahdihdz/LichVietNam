@@ -37,7 +37,34 @@
     {
       "name": "Hôm nay",
       "short_name": "Hôm nay",
+      "description": "Xem lịch hôm nay",
       "url": "/?view=today",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ghi chú & sự kiện",
+      "short_name": "Ghi chú",
+      "description": "Ghi chú và sự kiện theo ngày",
+      "url": "/?view=notes",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Tiện ích hôm nay",
+      "short_name": "Tiện ích",
+      "description": "Chế độ tiện ích gọn cho hôm nay",
+      "url": "/?view=widget",
       "icons": [
         {
           "src": "icon-192.png",
