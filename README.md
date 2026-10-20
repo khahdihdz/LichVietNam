@@ -34,6 +34,8 @@ Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam t
 ## ✨ Tính năng
 
 - 📅 Xem lịch Dương – Âm theo ngày.
+- 🔎 Tra cứu **bất kỳ ngày nào** (1800–2199): chọn ngày bằng ô lịch, nút ngày trước/sau, phím ← →, hoặc nhấn vào một ngày trong lịch tháng/lịch năm.
+- 🔗 Liên kết trực tiếp tới một ngày dạng `#ngay=YYYY-MM-DD` để chia sẻ hoặc mở lại đúng ngày.
 - 🔄 Chuyển đổi Dương lịch ↔ Âm lịch.
 - 🌓 Hiển thị ngày âm, tháng nhuận và Can Chi.
 - ☀️ Hiển thị tiết khí.
@@ -46,6 +48,22 @@ Lịch Việt Nam tập trung vào trải nghiệm tra cứu lịch Việt Nam t
 - 📱 Responsive cho điện thoại, máy tính bảng và máy tính.
 - 📲 Hỗ trợ PWA, Service Worker và biểu tượng cài đặt.
 - ⚡ Không cần framework hoặc backend; phần lịch chạy hoàn toàn phía trình duyệt.
+
+## 🔎 Tra cứu ngày bất kỳ
+
+Trang đầu mặc định hiển thị hôm nay. Để xem một ngày khác:
+
+1. Mở ô chọn ngày ở đầu thẻ và chọn ngày mong muốn (hỗ trợ 1800–2199).
+2. Hoặc dùng nút `‹` / `›`, phím mũi tên `←` / `→` trên bàn phím.
+3. Hoặc nhấn vào một ngày trong **Lịch tháng** / **Lịch năm**; kết quả chuyển đổi ở tab **Chuyển đổi** cũng có nút “Xem chi tiết ngày này”.
+
+Ngày đang xem được ghi lên URL dưới dạng `#ngay=YYYY-MM-DD`, ví dụ:
+
+```
+https://khahdihdz.github.io/#ngay=2026-10-05
+```
+
+Nhờ đó có thể lưu, chia sẻ hoặc mở lại đúng ngày; khi chuyển sang các mục khác, phần hash được xoá. Mọi thông tin (âm lịch, Can Chi, tiết khí, giờ Hoàng đạo, ngày lễ) đều được tính lại theo ngày đã chọn.
 
 ## 🧮 Thuật toán lịch Âm
 
