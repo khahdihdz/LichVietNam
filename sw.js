@@ -1,6 +1,6 @@
 // Service worker for Lịch Việt Nam
 // Tăng CACHE_VERSION mỗi khi thay đổi app shell để buộc trình duyệt nhận bản mới.
-const CACHE_VERSION = "v4";
+const CACHE_VERSION = "v5";
 const CACHE = "lich-vn-" + CACHE_VERSION;
 const APP_SHELL = [
   "./",
