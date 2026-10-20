@@ -237,6 +237,25 @@ table.month td.today.selected{outline-color:var(--text);}
   border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;
 }
 
+/* ---------- Tab Giới thiệu ---------- */
+.about-head{display:flex;align-items:center;gap:12px;}
+.about-logo{font-size:38px;line-height:1;}
+.about-head h3{margin:0;}
+.about p{font-size:14px;line-height:1.6;margin:10px 0 0;}
+.about ul{margin:8px 0 0;padding-left:20px;font-size:14px;line-height:1.6;}
+.about li{margin-bottom:5px;}
+.about li:last-child{margin-bottom:0;}
+.about h4{margin:14px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+.about a{color:var(--accent);text-decoration:none;font-weight:600;}
+.about a:hover{text-decoration:underline;}
+.about code{background:var(--bg);border-radius:4px;padding:1px 5px;font-size:12px;}
+.about-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.about-badges span{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--muted);}
+.about .disclaimer{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--muted);margin-top:12px;}
+.about .kv{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;font-size:14px;padding:7px 0;border-bottom:1px solid var(--line);}
+.about .kv:last-child{border-bottom:none;}
+.about .kv span:first-child{color:var(--muted);}
+
 </style>
 </head>
 <body>
@@ -251,6 +270,7 @@ table.month td.today.selected{outline-color:var(--text);}
         <button data-v="year" role="menuitem">🗓️ Lịch năm</button>
         <button data-v="convert" role="menuitem">🔄 Chuyển đổi</button>
         <button data-v="holidays" role="menuitem">🎉 Ngày lễ</button>
+        <button data-v="about" role="menuitem">ℹ️ Giới thiệu</button>
       </div>
     </div>
     <button class="installbtn" id="installBtn" type="button" title="Cài đặt Lịch Việt Nam">📲 Cài đặt</button>
@@ -703,6 +723,84 @@ function renderHolidays(){
   </div>`;
 }
 
+const APP_VERSION="1.1.0";
+function holidayYearText(){
+  const years=window.VN_HOLIDAY_SCHEDULE ? Object.keys(window.VN_HOLIDAY_SCHEDULE).sort() : [];
+  if(!years.length) return "những năm đã có thông báo";
+  return years.length===1 ? "năm "+years[0] : "các năm "+years.join(", ");
+}
+function renderAbout(){
+  return `<div class="card about">
+    <div class="about-head">
+      <div class="about-logo" aria-hidden="true">🗓️</div>
+      <div>
+        <h3>Lịch Việt Nam</h3>
+        <div class="note" style="margin:2px 0 0;">Phiên bản ${APP_VERSION} · Web App / PWA</div>
+      </div>
+    </div>
+    <p>Ứng dụng tra cứu lịch Dương – Âm theo múi giờ Việt Nam (UTC+7): ngày âm, Can Chi, tiết khí, giờ Hoàng đạo, pha Mặt Trăng và ngày lễ. Mọi phép tính chạy trực tiếp trên thiết bị, không cần tài khoản hay máy chủ.</p>
+    <div class="about-badges">
+      <span>🇻🇳 UTC+7</span>
+      <span>📴 Dùng offline</span>
+      <span>🔒 Không theo dõi</span>
+      <span>🆓 MIT</span>
+    </div>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">✨ Tính năng chính</h3>
+    <ul>
+      <li>Tra cứu <b>bất kỳ ngày nào</b> từ 1800 đến 2199 bằng ô chọn ngày, nút ngày trước/sau, phím ← → hoặc nhấn vào lịch tháng/lịch năm.</li>
+      <li>Chuyển đổi Dương lịch ↔ Âm lịch, hiển thị tháng nhuận.</li>
+      <li>Can Chi ngày – tháng – năm, 24 tiết khí, giờ Hoàng đạo và pha Mặt Trăng (ước tính).</li>
+      <li>Lịch tháng, lịch năm cùng danh sách ngày lễ, Tết Việt Nam.</li>
+      <li>Liên kết trực tiếp tới một ngày dạng <code>#ngay=YYYY-MM-DD</code> để lưu hoặc chia sẻ.</li>
+      <li>Giao diện sáng/tối, responsive, cài đặt như ứng dụng và dùng được khi offline.</li>
+    </ul>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">🧮 Lịch pháp &amp; độ chính xác</h3>
+    <p>Phần tính lịch dùng thuật toán <b>Hồ Ngọc Đức</b> (Ho Ngoc Duc Vietnamese Lunar Calendar), triển khai cho múi giờ UTC+7 — múi giờ dùng để xác định ngày Sóc và tiết khí của lịch Việt Nam.</p>
+    <p>Lịch Việt Nam tính theo UTC+7 nên có thể khác lịch Trung Quốc (UTC+8) ở một số tháng, đặc biệt trong các năm có tháng nhuận. Ứng dụng không lấy lịch Trung Quốc rồi đổi tên.</p>
+    <div class="kv"><span>Phạm vi tra cứu</span><span>1800 – 2199</span></div>
+    <div class="kv"><span>Múi giờ</span><span>Asia/Ho_Chi_Minh (UTC+7)</span></div>
+    <div class="kv"><span>Thuật toán</span><span>Hồ Ngọc Đức</span></div>
+    <p class="disclaimer">Kết quả âm lịch ở những năm rất xa hiện tại có thể sai lệch do dao động thiên văn và dữ liệu ΔT; nên đối chiếu thêm khi dùng cho mục đích đặc biệt.</p>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">🎉 Ngày lễ &amp; lịch nghỉ</h3>
+    <p>Dữ liệu được tách thành hai nhóm: <b>ngày nghỉ chính thức theo năm</b> (chỉ ghi các ngày đã được công bố) và <b>ngày kỷ niệm, truyền thống, phong tục</b> (không mặc nhiên là ngày nghỉ hưởng nguyên lương).</p>
+    <p>Hiện ứng dụng có lịch nghỉ cụ thể cho ${holidayYearText()}. Với năm chưa có thông báo, ứng dụng không tự suy đoán lịch nghỉ.</p>
+    <p class="disclaimer">Ứng dụng là công cụ tiện ích, không thay thế văn bản pháp luật hoặc thông báo nghỉ lễ chính thức. Khi dùng cho mục đích hành chính, lao động hoặc pháp lý, hãy đối chiếu quy định áp dụng cho đúng năm và đối tượng.</p>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">🔐 Quyền riêng tư</h3>
+    <ul>
+      <li>Không yêu cầu tài khoản, không có backend và không gửi nội dung tra cứu lên máy chủ.</li>
+      <li>Không dùng analytics, quảng cáo hay mã theo dõi bên thứ ba.</li>
+      <li><code>localStorage</code> chỉ lưu lựa chọn giao diện sáng/tối; Service Worker lưu bản offline của ứng dụng.</li>
+      <li>Ngày đang xem được ghi trên URL (<code>#ngay=...</code>) để chia sẻ, không phải dữ liệu cá nhân gửi đi đâu.</li>
+    </ul>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">📲 Cài đặt ứng dụng</h3>
+    <ul>
+      <li><b>Android / Chrome:</b> mở menu trình duyệt → “Thêm vào Màn hình chính”, hoặc bấm nút “📲 Cài đặt” trên thanh tiêu đề khi nút này xuất hiện.</li>
+      <li><b>iOS / Safari:</b> bấm nút Chia sẻ → “Thêm vào MH chính”.</li>
+      <li><b>Máy tính:</b> bấm biểu tượng cài đặt trên thanh địa chỉ của Chrome/Edge.</li>
+    </ul>
+    <p>Sau khi cài, ứng dụng mở như một cửa sổ riêng và vẫn dùng được khi không có mạng.</p>
+  </div>
+  <div class="card about">
+    <h3 style="margin-top:0;">🔗 Liên kết &amp; góp ý</h3>
+    <div class="kv"><span>Trang web</span><a href="https://lichvn.pages.dev" target="_blank" rel="noopener">lichvn.pages.dev</a></div>
+    <div class="kv"><span>Mã nguồn</span><a href="https://github.com/khahdihdz/LichVietNam" target="_blank" rel="noopener">khahdihdz/LichVietNam</a></div>
+    <div class="kv"><span>Báo lỗi / góp ý</span><a href="https://github.com/khahdihdz/LichVietNam/issues" target="_blank" rel="noopener">GitHub Issues</a></div>
+    <div class="kv"><span>Tác giả</span><a href="https://khahdihdz.github.io" target="_blank" rel="noopener">khahdihdz.github.io</a></div>
+    <div class="kv"><span>Giấy phép</span><span>MIT</span></div>
+    <div class="kv"><span>Phiên bản</span><span>${APP_VERSION}</span></div>
+  </div>`;
+}
+
 function renderApp(){
   document.querySelectorAll('#navMenu button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));
   const main=document.getElementById('main');
@@ -711,6 +809,7 @@ function renderApp(){
   else if(view==='year') main.innerHTML=renderYear();
   else if(view==='convert') main.innerHTML=renderConvert();
   else if(view==='holidays') main.innerHTML=renderHolidays();
+  else if(view==='about') main.innerHTML=renderAbout();
 }
 const navMenu=document.getElementById('navMenu'), hamBtn=document.getElementById('hamBtn');
 function closeMenu(){ navMenu.classList.remove('open'); hamBtn.setAttribute('aria-expanded','false'); }
