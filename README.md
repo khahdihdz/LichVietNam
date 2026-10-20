@@ -97,6 +97,8 @@ Workflow GitHub Pages chạy khi push lên `main`:
 2. Chạy `scripts/stamp-build.js` để điền commit, thời điểm và nội dung commit vào các thẻ `<meta name="app-build-*">`, thêm `?v=<commit>` vào ảnh chia sẻ và tạo `version.json`.
 3. Upload artifact tĩnh và deploy bằng `actions/deploy-pages`.
 
+> Kiểm tra commit đang chạy trong tab **ℹ️ Giới thiệu** → **Phiên bản & bản dựng**.
+
 Tab **Giới thiệu** đọc thông tin bản dựng từ các thẻ meta ở trên. Nếu `version.json` không có (ví dụ bản Cloudflare), ứng dụng gọi GitHub API công khai một lần và lưu cache 10 phút để hiển thị commit gần nhất; khi offline hoặc API lỗi, thông tin bản dựng chỉ hiển thị “đang cập nhật…”.
 
 ## 🧮 Thuật toán lịch Âm
