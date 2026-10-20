@@ -1,6 +1,6 @@
 // Service worker for Lịch Việt Nam
 // Tăng CACHE_VERSION mỗi khi thay đổi app shell để buộc trình duyệt nhận bản mới.
-const CACHE_VERSION = "v6";
+const CACHE_VERSION = "v7";
 const CACHE = "lich-vn-" + CACHE_VERSION;
 const APP_SHELL = [
   "./",
@@ -52,6 +52,9 @@ async function networkFirst(request) {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   const request = event.request;
+
+  // Không can thiệp vào thông tin bản dựng / GitHub API để luôn lấy bản mới.
+  if (request.url.indexOf("api.github.com") >= 0 || request.url.endsWith("/version.json")) return;
 
   // HTML/JS/JSON phải ưu tiên bản mới; khi offline dùng cache.
   if (
