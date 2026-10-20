@@ -3,24 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Tra cứu lịch Âm Dương Việt Nam cho bất kỳ ngày nào: Can Chi, tiết khí, giờ Hoàng đạo và ngày lễ — hoạt động offline, không dùng lịch Trung Quốc đổi tên.">
+<meta name="description" content="Lịch Việt Nam: tra cứu lịch Âm Dương cho bất kỳ ngày nào, Can Chi, tiết khí, ngày lễ, ghi chú và sự kiện — hoạt động offline.">
+<meta name="app-build-commit" content="">
+<meta name="app-build-short" content="">
+<meta name="app-build-date" content="">
+<meta name="app-build-message" content="">
+<meta name="app-build-ref" content="">
 <meta property="og:title" content="Lịch Việt Nam - Lịch Âm Dương Việt Nam">
-<meta property="og:description" content="Tra cứu lịch Âm Dương Việt Nam cho bất kỳ ngày nào: Can Chi, tiết khí và ngày lễ.">
+<meta property="og:description" content="Tra cứu lịch Âm Dương Việt Nam cho bất kỳ ngày nào: Can Chi, tiết khí, ngày lễ, ghi chú và sự kiện — hoạt động offline.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lịch Việt Nam">
 <meta property="og:locale" content="vi_VN">
-<meta property="og:url" content="https://khahdihdz.github.io/">
-<meta property="og:image" content="https://khahdihdz.github.io/icon-512.png">
-<meta property="og:image:secure_url" content="https://khahdihdz.github.io/icon-512.png">
+<meta property="og:url" content="https://lichvn.pages.dev/">
+<meta property="og:image" content="https://lichvn.pages.dev/og-image.png">
+<meta property="og:image:secure_url" content="https://lichvn.pages.dev/og-image.png">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Lịch Việt Nam — Lịch Âm Dương Việt Nam">
 <meta name="twitter:title" content="Lịch Việt Nam - Lịch Âm Dương Việt Nam">
-<meta name="twitter:description" content="Tra cứu lịch Âm Dương Việt Nam, Can Chi, tiết khí, giờ Hoàng đạo và ngày lễ.">
-<meta name="twitter:image" content="https://khahdihdz.github.io/icon-512.png">
+<meta name="twitter:description" content="Tra cứu lịch Âm Dương Việt Nam, Can Chi, tiết khí, ngày lễ, ghi chú và sự kiện.">
+<meta name="twitter:image" content="https://lichvn.pages.dev/og-image.png">
 <meta name="twitter:image:alt" content="Lịch Việt Nam — Lịch Âm Dương Việt Nam">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://lichvn.pages.dev/">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -29,17 +35,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Lịch Việt Nam">
-<link rel="author" href="https://khahdihdz.github.io">
+<link rel="author" href="https://github.com/khahdihdz">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Lịch Việt Nam",
-  "url": "https://khahdihdz.github.io",
+  "url": "https://lichvn.pages.dev/",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
-  "author": { "@type": "Person", "url": "https://khahdihdz.github.io" },
-  "description": "Lịch Âm Dương Việt Nam, Can Chi, tiết khí, giờ Hoàng đạo và ngày lễ."
+  "author": { "@type": "Person", "url": "https://github.com/khahdihdz" },
+  "description": "Lịch Âm Dương Việt Nam, Can Chi, tiết khí, ngày lễ, ghi chú và sự kiện."
 }
 </script>
 <title>Lịch Việt Nam - Lịch Âm Dương</title>
@@ -66,6 +72,7 @@ header h1{font-size:16px;margin:0;letter-spacing:.3px;}
 .navmenu.open{display:block;}
 .navmenu button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--text);padding:11px 14px;font-size:14px;cursor:pointer;}
 .navmenu button.active{background:var(--accent);color:#fff;}
+.navmenu button[hidden]{display:none;}
 .navmenu button:not(:last-child){border-bottom:1px solid var(--line);}
 .themebtn{background:none;border:none;font-size:18px;cursor:pointer;}
 .installbtn{display:none;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;}
@@ -292,7 +299,7 @@ table.month td.today.selected{outline-color:var(--text);}
 .note-open b{color:var(--accent);}
 .note-snippet{display:block;color:var(--muted);font-size:12px;margin-top:2px;overflow-wrap:anywhere;}
 
-/* ---------- Tiện ích ---------- */
+/* ---------- Widget (Document Picture-in-Picture) ---------- */
 .widget{position:relative;overflow:hidden;padding-top:20px;}
 .widget::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--holiday));}
 .w-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
@@ -333,7 +340,7 @@ body.widget-mode .widget{margin-bottom:0;}
         <button data-v="convert" role="menuitem">🔄 Chuyển đổi</button>
         <button data-v="holidays" role="menuitem">🎉 Ngày lễ</button>
         <button data-v="notes" role="menuitem">📝 Ghi chú &amp; sự kiện</button>
-        <button data-v="widget" role="menuitem">🧩 Tiện ích</button>
+        <button data-v="widget" id="navWidget" role="menuitem" hidden>🪟 Widget</button>
         <button data-v="about" role="menuitem">ℹ️ Giới thiệu</button>
       </div>
     </div>
@@ -537,6 +544,9 @@ function findHolidayLunar(ld,lm,leap){ if(leap) return null; return LUNAR_HOLIDA
 /* ---------- App state / rendering ---------- */
 let view="today";
 let widgetStandalone=false;
+const WIDGET_SUPPORTED=(()=>{ try{ return typeof window!=="undefined" && "documentPictureInPicture" in window; }catch(e){ return false; } })();
+const BUILD_CACHE_KEY="lvn-build-v1";
+let buildInfo={commit:"",short:"",date:"",message:"",ref:"",source:""};
 const now=new Date();
 let viewYear=now.getFullYear(), viewMonth=now.getMonth()+1;
 let selDate={d:now.getDate(),m:now.getMonth()+1,y:now.getFullYear()};
@@ -980,7 +990,7 @@ function renderHolidays(){
   </div>`;
 }
 
-const APP_VERSION="1.2.0";
+const APP_VERSION="1.3.0";
 function renderNotes(){
   const t=todayVN();
   const upcoming=upcomingEvents(t,30);
@@ -1011,7 +1021,7 @@ function renderNotes(){
       </div>
       <div class="err" id="qevErr"></div>
     </form>
-    <div class="note">Sự kiện lưu trên thiết bị này và hiển thị trong ngày, lịch tháng và tiện ích.</div>
+    <div class="note">Sự kiện lưu trên thiết bị này và hiển thị trong ngày, lịch tháng và Widget (nếu trình duyệt hỗ trợ).</div>
   </div>
   <div class="card">
     <h3 style="margin-top:0;">📝 Ghi chú đã lưu</h3>
@@ -1087,8 +1097,8 @@ function renderWidget(){
       <button type="button" class="primary" onclick="openFloatingWidget()">🪟 Cửa sổ nổi</button>
       <a class="w-link" href="./?view=notes">Ghi chú &amp; sự kiện</a>
     </div>
-    <div class="note" id="widgetHint" hidden>Trình duyệt này không hỗ trợ cửa sổ nổi (Document Picture-in-Picture). Trên điện thoại, hãy thêm ứng dụng vào Màn hình chính rồi mở lối tắt “Tiện ích hôm nay”.</div>
-    <div class="note">Chế độ tiện ích hiển thị gọn ngày hôm nay cùng ghi chú, sự kiện và lịch sắp tới. Trình duyệt web không thể tạo widget gốc trên màn hình chính Android/iOS; hãy dùng lối tắt PWA hoặc cửa sổ nổi trên máy tính.</div>
+    <div class="note" id="widgetHint" hidden>Không mở được cửa sổ nổi. Hãy kiểm tra quyền cửa sổ bật lên của trình duyệt rồi thử lại.</div>
+    <div class="note">Widget hiển thị gọn ngày hôm nay cùng ghi chú, sự kiện và lịch sắp tới trong cửa sổ nổi của trình duyệt. Đây không phải widget gốc trên màn hình chính hệ điều hành.</div>
   </div>`;
 }
 function tickClock(){
@@ -1107,7 +1117,7 @@ async function openFloatingWidget(){
     if(pipWin&&!pipWin.closed){ pipWin.focus(); return; }
     pipWin=await window.documentPictureInPicture.requestWindow({width:340,height:420});
     const doc=pipWin.document;
-    doc.head.innerHTML='<meta charset="utf-8"><title>Lịch Việt Nam — Tiện ích</title>';
+    doc.head.innerHTML='<meta charset="utf-8"><title>Lịch Việt Nam — Widget</title>';
     const style=doc.createElement("style");
     style.textContent=`*{box-sizing:border-box}body{margin:0;padding:14px;background:#f7f5f0;color:#1f2320;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.4}
       #pipRoot{position:relative}
@@ -1153,6 +1163,77 @@ function holidayYearText(){
   if(!years.length) return "những năm đã có thông báo";
   return years.length===1 ? "năm "+years[0] : "các năm "+years.join(", ");
 }
+function readBuildMeta(){
+  if(typeof document.querySelector!=="function") return null;
+  const get=name=>{ const el=document.querySelector('meta[name="'+name+'"]'); return el?(el.getAttribute("content")||""):""; };
+  const commit=get("app-build-commit"), short=get("app-build-short");
+  const date=get("app-build-date"), message=get("app-build-message"), ref=get("app-build-ref");
+  if(!commit||commit.indexOf("__")===0) return null;
+  return {commit:commit,short:short||commit.slice(0,7),date:date,message:message,ref:ref,source:"meta"};
+}
+function normalizeBuildInfo(v){
+  if(!v||!v.commit) return null;
+  return {commit:String(v.commit),short:String(v.short||v.commit).slice(0,7),date:String(v.date||""),message:String(v.message||""),ref:String(v.ref||""),source:String(v.source||"")};
+}
+function fmtBuildDate(iso){
+  if(!iso) return "";
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return iso;
+  return pad2(d.getDate())+"/"+pad2(d.getMonth()+1)+"/"+d.getFullYear()+" "+pad2(d.getHours())+":"+pad2(d.getMinutes());
+}
+function buildInfoHtml(){
+  let host="cục bộ";
+  try{ host=location.hostname||host; }catch(e){}
+  let rows=`<div class="kv"><span>Phiên bản</span><span>${APP_VERSION}</span></div>`;
+  rows+=`<div class="kv"><span>Đang chạy tại</span><span>${esc(host)}</span></div>`;
+  if(buildInfo.short){
+    rows+=`<div class="kv"><span>Commit</span><span><a href="https://github.com/khahdihdz/LichVietNam/commit/${esc(buildInfo.commit)}" target="_blank" rel="noopener">${esc(buildInfo.short)}</a>${buildInfo.ref?" · "+esc(buildInfo.ref):""}</span></div>`;
+    rows+=`<div class="kv"><span>Thời điểm</span><span>${esc(fmtBuildDate(buildInfo.date))}</span></div>`;
+    rows+=`<div class="kv"><span>Thay đổi</span><span>${esc(buildInfo.message||"(không có mô tả)")}</span></div>`;
+  } else {
+    rows+=`<div class="kv"><span>Commit</span><span>đang cập nhật…</span></div>`;
+  }
+  return rows;
+}
+function refreshBuildBox(){
+  const el=document.getElementById("buildInfoBox");
+  if(el) el.innerHTML=buildInfoHtml();
+}
+async function loadBuildInfo(){
+  const meta=readBuildMeta();
+  if(meta){
+    buildInfo=meta;
+    refreshBuildBox();
+    return;
+  }
+  let cached=null;
+  try{ cached=JSON.parse(localStorage.getItem(BUILD_CACHE_KEY)||"null"); }catch(e){}
+  if(cached&&cached.info&&cached.at&&Date.now()-cached.at<600000){
+    buildInfo=normalizeBuildInfo(cached.info)||buildInfo;
+    refreshBuildBox();
+    return;
+  }
+  let info=null;
+  try{
+    const r=await fetch("./version.json",{cache:"no-store"});
+    if(r.ok) info=await r.json();
+  }catch(e){}
+  if(!info||!info.commit){
+    try{
+      const r=await fetch("https://api.github.com/repos/khahdihdz/LichVietNam/commits/main",{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});
+      if(r.ok){
+        const j=await r.json();
+        info={version:APP_VERSION,commit:j.sha,short:String(j.sha||"").slice(0,7),date:j.commit&&j.commit.author?j.commit.author.date:"",message:j.commit&&j.commit.message?String(j.commit.message).split("\n")[0]:"",ref:"main",source:"api"};
+      }
+    }catch(e){}
+  }
+  info=normalizeBuildInfo(info);
+  if(info){
+    buildInfo=info;
+    try{ localStorage.setItem(BUILD_CACHE_KEY,JSON.stringify({at:Date.now(),info:info})); }catch(e){}
+    refreshBuildBox();
+  }
+}
 function renderAbout(){
   return `<div class="card about">
     <div class="about-head">
@@ -1171,6 +1252,11 @@ function renderAbout(){
     </div>
   </div>
   <div class="card about">
+    <h3 style="margin-top:0;">🏷️ Phiên bản &amp; bản dựng</h3>
+    <div id="buildInfoBox">${buildInfoHtml()}</div>
+    <p class="disclaimer">Thông tin commit được cập nhật tự động theo bản triển khai gần nhất.</p>
+  </div>
+  <div class="card about">
     <h3 style="margin-top:0;">✨ Tính năng chính</h3>
     <ul>
       <li>Tra cứu <b>bất kỳ ngày nào</b> từ 1800 đến 2199 bằng ô chọn ngày, nút ngày trước/sau, phím ← → hoặc nhấn vào lịch tháng/lịch năm.</li>
@@ -1178,7 +1264,7 @@ function renderAbout(){
       <li>Can Chi ngày – tháng – năm, 24 tiết khí, giờ Hoàng đạo và pha Mặt Trăng (ước tính).</li>
       <li>Lịch tháng, lịch năm cùng danh sách ngày lễ, Tết Việt Nam.</li>
       <li><b>Ghi chú theo ngày</b> và <b>sự kiện</b> (giờ, lặp hằng năm theo dương lịch hoặc âm lịch), lưu trên thiết bị và đánh dấu trên lịch tháng.</li>
-      <li><b>Chế độ tiện ích</b> hiển thị gọn hôm nay cùng ghi chú, sự kiện và lịch sắp tới; hỗ trợ cửa sổ nổi trên trình duyệt tương thích và lối tắt PWA.</li>
+      <li><b>Widget</b> hiển thị gọn hôm nay cùng ghi chú, sự kiện và lịch sắp tới trong cửa sổ nổi (Document Picture-in-Picture). Tính năng chỉ xuất hiện trên trình duyệt hỗ trợ.</li>
       <li>Liên kết trực tiếp tới một ngày dạng <code>#ngay=YYYY-MM-DD</code> để lưu hoặc chia sẻ.</li>
       <li>Giao diện sáng/tối, responsive, cài đặt như ứng dụng và dùng được khi offline.</li>
     </ul>
@@ -1203,6 +1289,7 @@ function renderAbout(){
     <ul>
       <li>Không yêu cầu tài khoản, không có backend và không gửi nội dung tra cứu lên máy chủ.</li>
       <li>Không dùng analytics, quảng cáo hay mã theo dõi bên thứ ba.</li>
+      <li>Tab Giới thiệu có thể gọi GitHub API công khai để lấy thông tin commit gần nhất; không gửi nội dung ghi chú, sự kiện hay dữ liệu cá nhân.</li>
       <li><code>localStorage</code> lưu lựa chọn giao diện sáng/tối và <b>ghi chú, sự kiện do bạn tạo</b>; dữ liệu chỉ nằm trên thiết bị/trình duyệt này, không được đồng bộ lên máy chủ.</li>
       <li>Service Worker lưu bản offline của ứng dụng.</li>
       <li>Ngày đang xem được ghi trên URL (<code>#ngay=...</code>) để chia sẻ, không phải dữ liệu cá nhân gửi đi đâu.</li>
@@ -1216,22 +1303,23 @@ function renderAbout(){
       <li><b>iOS / Safari:</b> bấm nút Chia sẻ → “Thêm vào MH chính”.</li>
       <li><b>Máy tính:</b> bấm biểu tượng cài đặt trên thanh địa chỉ của Chrome/Edge.</li>
     </ul>
-    <p>Sau khi cài, ứng dụng mở như một cửa sổ riêng và vẫn dùng được khi không có mạng. Nhấn giữ biểu tượng ứng dụng để thấy các lối tắt “Hôm nay”, “Ghi chú &amp; sự kiện”, “Tiện ích hôm nay”.</p>
-    <p class="disclaimer">Trình duyệt web/PWA không thể đăng ký widget gốc trên màn hình chính Android/iOS. Chế độ Tiện ích mở như một cửa sổ gọn; trên máy tính tương thích còn có thể mở cửa sổ nổi luôn hiển thị trên màn hình.</p>
+    <p>Sau khi cài, ứng dụng mở như một cửa sổ riêng và vẫn dùng được khi không có mạng. Nhấn giữ biểu tượng ứng dụng để thấy các lối tắt “Hôm nay”, “Ghi chú &amp; sự kiện”.</p>
+    <p class="disclaimer">Trình duyệt web/PWA không thể đăng ký widget gốc trên màn hình chính Android/iOS. Tính năng Widget dùng cửa sổ nổi và chỉ xuất hiện khi trình duyệt hỗ trợ Document Picture-in-Picture.</p>
   </div>
   <div class="card about">
     <h3 style="margin-top:0;">🔗 Liên kết &amp; góp ý</h3>
     <div class="kv"><span>Trang web</span><a href="https://lichvn.pages.dev" target="_blank" rel="noopener">lichvn.pages.dev</a></div>
+    <div class="kv"><span>GitHub Pages</span><a href="https://khahdihdz.github.io/LichVietNam/" target="_blank" rel="noopener">khahdihdz.github.io/LichVietNam</a></div>
     <div class="kv"><span>Mã nguồn</span><a href="https://github.com/khahdihdz/LichVietNam" target="_blank" rel="noopener">khahdihdz/LichVietNam</a></div>
     <div class="kv"><span>Báo lỗi / góp ý</span><a href="https://github.com/khahdihdz/LichVietNam/issues" target="_blank" rel="noopener">GitHub Issues</a></div>
-    <div class="kv"><span>Tác giả</span><a href="https://khahdihdz.github.io" target="_blank" rel="noopener">khahdihdz.github.io</a></div>
+    <div class="kv"><span>Tác giả</span><a href="https://github.com/khahdihdz" target="_blank" rel="noopener">github.com/khahdihdz</a></div>
     <div class="kv"><span>Giấy phép</span><span>MIT</span></div>
-    <div class="kv"><span>Phiên bản</span><span>${APP_VERSION}</span></div>
   </div>`;
 }
 
 function renderApp(){
-  document.body.classList.toggle("widget-mode", view==="widget"&&widgetStandalone);
+  const widgetActive=view==="widget"&&WIDGET_SUPPORTED;
+  document.body.classList.toggle("widget-mode", widgetActive&&widgetStandalone);
   document.querySelectorAll('#navMenu button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));
   const main=document.getElementById('main');
   if(view==='today') main.innerHTML=renderDay();
@@ -1240,7 +1328,8 @@ function renderApp(){
   else if(view==='convert') main.innerHTML=renderConvert();
   else if(view==='holidays') main.innerHTML=renderHolidays();
   else if(view==='notes') main.innerHTML=renderNotes();
-  else if(view==='widget') main.innerHTML=renderWidget();
+  else if(view==='widget'&&WIDGET_SUPPORTED) main.innerHTML=renderWidget();
+  else if(view==='widget') main.innerHTML=renderDay();
   else if(view==='about') main.innerHTML=renderAbout();
 }
 const navMenu=document.getElementById('navMenu'), hamBtn=document.getElementById('hamBtn');
@@ -1287,7 +1376,12 @@ function applyQueryView(){
   let v=null;
   try{ v=new URLSearchParams(location.search).get("view"); }catch(e){}
   const allowed=["today","month","year","convert","holidays","notes","widget","about"];
+  if(v==="widget"&&!WIDGET_SUPPORTED) v=null;
   if(v&&allowed.indexOf(v)>=0){ view=v; widgetStandalone=(v==="widget"); }
+}
+function applyFeatureSupport(){
+  const btn=document.getElementById("navWidget");
+  if(btn) btn.hidden=!WIDGET_SUPPORTED;
 }
 window.addEventListener('hashchange',readHashDate);
 document.addEventListener('keydown',e=>{
@@ -1298,8 +1392,10 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowRight'){ e.preventDefault(); shiftDay(1); }
 });
 applyQueryView();
+applyFeatureSupport();
 readHashDate();
 renderApp();
+loadBuildInfo();
 if('serviceWorker' in navigator){
   let reloadingAfterUpdate=false;
   const showUpdateNotice=()=>{
