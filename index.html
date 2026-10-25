@@ -304,6 +304,17 @@ table.month td.today.selected{outline-color:var(--text);}
 .note-open b{color:var(--accent);}
 .note-snippet{display:block;color:var(--muted);font-size:12px;margin-top:2px;overflow-wrap:anywhere;}
 
+/* ---------- Thông báo ---------- */
+.day-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-left:4px solid var(--accent);}
+.day-notice .dn-text{font-size:14px;line-height:1.5;min-width:0;}
+.day-notice .dn-text span{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+.day-notice button{flex:0 0 auto;background:var(--accent);border:0;border-radius:8px;color:#fff;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);max-width:min(92vw,420px);padding:10px 16px;border-radius:999px;background:#1f2320;color:#fff;font-size:14px;line-height:1.4;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:40;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast.ok{background:var(--accent);}
+.toast.error{background:var(--holiday);}
+@media (prefers-reduced-motion: reduce){.toast{transition:none;}}
+
 /* ---------- Widget (Document Picture-in-Picture) ---------- */
 .widget{position:relative;overflow:hidden;padding-top:20px;}
 .widget::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--holiday));}
@@ -354,6 +365,7 @@ body.widget-mode .widget{margin-bottom:0;}
   </div>
 </header>
 <main id="main"></main>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 <footer>
   Xây dựng bởi <a href="https://khahdihdz.github.io" target="_blank" rel="noopener">khahdihdz.github.io</a> · Lịch pháp Việt Nam, không dùng lịch Trung Quốc đổi tên
 </footer>
@@ -609,6 +621,16 @@ function onDateInput(value){
 const NOTES_KEY="lvn-notes-v1", EVENTS_KEY="lvn-events-v1";
 function pad2(n){ return String(n).padStart(2,"0"); }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+let toastTimer=null;
+function showToast(message,type){
+  const el=document.getElementById("toast");
+  if(!el) return;
+  const kind=type==="error"?"error":"ok";
+  el.textContent=message;
+  el.className="toast show "+kind;
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{ el.className="toast "+kind; }, kind==="error"?4200:2600);
+}
 function loadStore(key,fallback){
   try{
     const raw=localStorage.getItem(key);
@@ -709,7 +731,7 @@ function renderDay(){
   const moon=getMoonPhase(lu.day);
   const dd=String(t.d).padStart(2,'0'), mm=String(t.m).padStart(2,'0');
   const dow=new Date(t.y,t.m-1,t.d).getDay();
-  return `<div class="card hero">
+  return `${renderDayNotice(t)}<div class="card hero">
     <div class="daynav">
       <button type="button" onclick="shiftDay(-1)" aria-label="Ngày trước" title="Ngày trước (←)">‹</button>
       <input type="date" id="datePicker" value="${isoOf(t)}" min="1800-01-01" max="2199-12-31"
@@ -739,6 +761,26 @@ function renderDay(){
   <div class="note">${isToday?`Đang xem hôm nay (${dd}/${mm}/${t.y}).`:`Đang xem ngày ${dd}/${mm}/${t.y} — không phải hôm nay.`}
   Chọn ngày ở ô phía trên, dùng phím ← → hoặc nhấn vào một ngày trong lịch tháng để tra cứu bất kỳ ngày nào (1800–2199).</div>`;
 }
+function renderDayNotice(t){
+  const hasNote=!!getNote(t.d,t.m,t.y);
+  const evCount=eventsOn(t.d,t.m,t.y).length;
+  if(!hasNote&&!evCount) return "";
+  const parts=[];
+  if(hasNote) parts.push("1 ghi chú");
+  if(evCount) parts.push(evCount+" sự kiện");
+  return `<div class="card day-notice">
+    <div class="dn-text">🔔 <b>Ngày này có ${parts.join(" và ")}.</b>
+      <span>Nội dung được quản lý trong tab Ghi chú &amp; sự kiện.</span></div>
+    <button type="button" onclick="openNotesForDay()">Xem ghi chú &amp; sự kiện</button>
+  </div>`;
+}
+function openNotesForDay(){
+  noteEditDate=isoOf(selDate);
+  view="notes";
+  clearHash(); clearViewParam();
+  renderApp();
+  try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); }
+}
 function renderEventItem(ev,withDelete){
   const tag=repeatLabel(ev.repeat);
   return `<div class="ev-item">
@@ -762,7 +804,7 @@ function renderNoteEditor(){
       oninput="onNoteInput()" aria-label="Ghi chú ngày ${iso}">${esc(text)}</textarea>
     <div class="note-actions">
       <button type="button" class="mini-btn" onclick="clearDayNote()">Xoá</button>
-      <button type="button" class="mini-btn accent" onclick="saveDayNote()">Lưu</button>
+      <button type="button" class="mini-btn accent" onclick="saveDayNote(true)">Lưu</button>
     </div>
   </div>`;
 }
@@ -785,15 +827,17 @@ function onNoteInput(){
   if(noteTimer) clearTimeout(noteTimer);
   noteTimer=setTimeout(saveDayNote,600);
 }
-function saveDayNote(){
+function saveDayNote(notify){
   if(noteTimer){ clearTimeout(noteTimer); noteTimer=null; }
   const ta=document.getElementById("dayNote");
   if(!ta) return;
   const p=parseISO(ta.dataset.date);
   if(!p) return;
+  const saved=!!ta.value.trim();
   setNote(p.d,p.m,p.y,ta.value);
   const status=document.getElementById("noteStatus");
-  if(status) status.textContent=ta.value.trim()?"Đã lưu ✓":"Đã xoá";
+  if(status) status.textContent=saved?"Đã lưu ✓":"Đã xoá";
+  if(notify) showToast(saved?"Đã lưu ghi chú":"Đã xoá ghi chú","ok");
 }
 function clearDayNote(){
   const ta=document.getElementById("dayNote");
@@ -805,11 +849,13 @@ function clearDayNote(){
   setNote(p.d,p.m,p.y,"");
   const status=document.getElementById("noteStatus");
   if(status) status.textContent="Đã xoá";
+  showToast("Đã xoá ghi chú","ok");
 }
 function deleteEvent(id){
   if(!confirm("Xoá sự kiện này?")) return;
-  removeEvent(id);
+  const ok=removeEvent(id);
   renderApp();
+  showToast(ok?"Đã xoá sự kiện":"Không tìm thấy sự kiện",ok?"ok":"error");
 }
 function daysInMonth(m,y){ return new Date(y,m,0).getDate(); }
 function renderMonth(){
@@ -983,7 +1029,7 @@ function renderHolidays(){
   </div>`;
 }
 
-const APP_VERSION="1.4.0";
+const APP_VERSION="1.5.0";
 function renderNotes(){
   const t=todayVN();
   const upcoming=upcomingEvents(t,30);
@@ -1047,10 +1093,11 @@ function submitQuickEvent(e){
   const timeEl=document.getElementById("qevTime"), repeatEl=document.getElementById("qevRepeat");
   const errEl=document.getElementById("qevErr");
   const p=parseISO(dateEl?dateEl.value:"");
-  if(!p){ if(errEl) errEl.textContent="Ngày không hợp lệ."; return false; }
+  if(!p){ if(errEl) errEl.textContent="Ngày không hợp lệ."; showToast("Ngày không hợp lệ.","error"); return false; }
   const res=addEvent(p.d,p.m,p.y,titleEl?titleEl.value:"",timeEl?timeEl.value:"",repeatEl?repeatEl.value:"none");
-  if(!res.ok){ if(errEl) errEl.textContent=res.error; return false; }
+  if(!res.ok){ if(errEl) errEl.textContent=res.error; showToast(res.error,"error"); return false; }
   renderApp();
+  showToast("Đã thêm sự kiện","ok");
   return false;
 }
 function deleteNote(key){
@@ -1058,6 +1105,7 @@ function deleteNote(key){
   delete notes[key];
   saveStore(NOTES_KEY,notes);
   renderApp();
+  showToast("Đã xoá ghi chú","ok");
 }
 function widgetInner(t,forPip){
   const lu=convertSolar2Lunar(t.d,t.m,t.y);
@@ -1257,7 +1305,7 @@ function renderAbout(){
       <li>Chuyển đổi Dương lịch ↔ Âm lịch, hiển thị tháng nhuận.</li>
       <li>Can Chi ngày – tháng – năm, 24 tiết khí, giờ Hoàng đạo và pha Mặt Trăng (ước tính).</li>
       <li>Lịch tháng, lịch năm cùng danh sách ngày lễ, Tết Việt Nam.</li>
-      <li><b>Ghi chú theo ngày</b> và <b>sự kiện</b> (giờ, lặp hằng năm theo dương lịch hoặc âm lịch), lưu trên thiết bị và đánh dấu trên lịch tháng.</li>
+      <li><b>Ghi chú theo ngày</b> và <b>sự kiện</b> (giờ, lặp hằng năm theo dương lịch hoặc âm lịch), lưu trên thiết bị và đánh dấu trên lịch tháng. Trang ngày nhắc khi có dữ liệu; thao tác lưu/xoá có thông báo nhanh.</li>
       <li><b>Widget</b> hiển thị gọn hôm nay cùng ghi chú, sự kiện và lịch sắp tới trong cửa sổ nổi (Document Picture-in-Picture). Tính năng chỉ xuất hiện trên trình duyệt hỗ trợ.</li>
       <li>Liên kết trực tiếp tới một ngày dạng <code>#ngay=YYYY-MM-DD</code> để lưu hoặc chia sẻ.</li>
       <li>Giao diện sáng/tối, responsive, cài đặt như ứng dụng và dùng được khi offline.</li>
@@ -1334,7 +1382,10 @@ navMenu.addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
   const v=b.dataset.v;
   if(v==='today'){ const t=todayVN(); setSelected(t.d,t.m,t.y); }
-  else { view=v; clearHash(); clearViewParam(); renderApp(); }
+  else {
+    if(v==='notes') noteEditDate=isoOf(selDate);
+    view=v; clearHash(); clearViewParam(); renderApp();
+  }
   closeMenu();
 });
 document.addEventListener('click',()=>closeMenu());

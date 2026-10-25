@@ -80,6 +80,7 @@ Nhờ đó có thể lưu, chia sẻ hoặc mở lại đúng ngày; khi chuyể
 - **Widget** (`?view=widget` hoặc tab 🪟 Widget): hiển thị gọn ngày hôm nay, Can Chi, tiết khí, ghi chú, sự kiện trong ngày và lịch sắp tới.
   - Chỉ hiển thị khi trình duyệt hỗ trợ **Document Picture-in-Picture** (Chrome/Edge máy tính). Trên trình duyệt không hỗ trợ, mục Widget và lối tắt tương ứng bị ẩn/loại bỏ.
   - Nút **Cửa sổ nổi** mở widget luôn hiển thị trên màn hình, có nút cập nhật nội dung.
+- **Nhắc và phản hồi**: trang ngày hiển thị dải nhắc khi ngày đang xem có ghi chú hoặc sự kiện, kèm nút mở tab; thao tác lưu/xoá ghi chú và thêm/xoá sự kiện có thông báo nhanh (toast).
 - Dữ liệu ghi chú/sự kiện chỉ lưu trong `localStorage` của trình duyệt trên thiết bị, không gửi lên máy chủ và không đồng bộ giữa các thiết bị.
 
 > Widget gốc trên màn hình chính Android/iOS cần ứng dụng native hoặc lớp đóng gói; PWA thuần web không đăng ký được widget hệ điều hành. Vì vậy dự án chỉ cung cấp widget cửa sổ nổi khi trình duyệt hỗ trợ, thay vì hiển thị một mục không dùng được.
