@@ -268,6 +268,11 @@ table.month td.today.selected{outline-color:var(--text);}
 .note-head h3{margin:0;font-size:16px;}
 .note-status{font-size:12px;color:var(--muted);}
 .note-card textarea{width:100%;min-height:90px;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:10px;font:inherit;font-size:14px;line-height:1.5;}
+.note-card input[type="date"]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 10px;font:inherit;font-size:14px;margin-bottom:8px;color-scheme:light;}
+:root[data-theme="dark"] .note-card input[type="date"]{color-scheme:dark;}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .note-card input[type="date"]{color-scheme:dark;}
+}
 .note-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:8px;}
 .mini-btn{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:7px 12px;font-size:13px;cursor:pointer;}
 .mini-btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
@@ -731,25 +736,8 @@ function renderDay(){
       ${isToday?"":'<button type="button" class="primary" onclick="goToday()">🏠 Về hôm nay</button>'}
     </div>
   </div>
-  ${renderDayNote(t)}
-  ${renderDayEvents(t)}
   <div class="note">${isToday?`Đang xem hôm nay (${dd}/${mm}/${t.y}).`:`Đang xem ngày ${dd}/${mm}/${t.y} — không phải hôm nay.`}
   Chọn ngày ở ô phía trên, dùng phím ← → hoặc nhấn vào một ngày trong lịch tháng để tra cứu bất kỳ ngày nào (1800–2199).</div>`;
-}
-function renderDayNote(t){
-  const text=getNote(t.d,t.m,t.y);
-  return `<div class="card note-card">
-    <div class="note-head">
-      <h3>📝 Ghi chú ngày ${pad2(t.d)}/${pad2(t.m)}</h3>
-      <span class="note-status" id="noteStatus">${text?"Đã lưu":"Trống"}</span>
-    </div>
-    <textarea id="dayNote" rows="3" maxlength="2000" placeholder="Ghi chú cho ngày này (lưu trên thiết bị của bạn)…"
-      oninput="onNoteInput()" aria-label="Ghi chú cho ngày ${pad2(t.d)}/${pad2(t.m)}/${t.y}">${esc(text)}</textarea>
-    <div class="note-actions">
-      <button type="button" class="mini-btn" onclick="clearDayNote()">Xoá</button>
-      <button type="button" class="mini-btn accent" onclick="saveDayNote()">Lưu</button>
-    </div>
-  </div>`;
 }
 function renderEventItem(ev,withDelete){
   const tag=repeatLabel(ev.repeat);
@@ -759,25 +747,36 @@ function renderEventItem(ev,withDelete){
     ${withDelete?`<button type="button" class="ev-del" onclick="deleteEvent('${esc(ev.id)}')" aria-label="Xoá sự kiện" title="Xoá sự kiện">🗑</button>`:""}
   </div>`;
 }
-function renderDayEvents(t){
-  const list=eventsOn(t.d,t.m,t.y);
-  return `<div class="card">
-    <div class="note-head"><h3>🎉 Sự kiện ngày này</h3><span class="note-status">${list.length?list.length+" sự kiện":""}</span></div>
-    <div class="ev-list">${list.length?list.map(ev=>renderEventItem(ev,true)).join(""):'<div class="ev-empty">Chưa có sự kiện. Thêm bên dưới để nhắc việc cho ngày này.</div>'}</div>
-    <form class="ev-form" onsubmit="return submitDayEvent(event)">
-      <input id="evTitle" type="text" maxlength="120" placeholder="Tên sự kiện / việc cần làm" required aria-label="Tên sự kiện">
-      <div class="ev-row">
-        <input id="evTime" type="time" aria-label="Giờ (không bắt buộc)">
-        <select id="evRepeat" aria-label="Lặp lại">
-          <option value="none">Không lặp</option>
-          <option value="yearly-solar">Hằng năm (dương lịch)</option>
-          <option value="yearly-lunar">Hằng năm (âm lịch)</option>
-        </select>
-        <button type="submit">Thêm</button>
-      </div>
-      <div class="err" id="evErr"></div>
-    </form>
+let noteEditDate=null;
+function renderNoteEditor(){
+  const iso=noteEditDate||isoOf(selDate);
+  const text=notes[iso]||"";
+  return `<div class="card note-card">
+    <div class="note-head">
+      <h3>📝 Ghi chú theo ngày</h3>
+      <span class="note-status" id="noteStatus">${text?"Đã lưu":"Trống"}</span>
+    </div>
+    <input id="noteDate" type="date" value="${iso}" min="1800-01-01" max="2199-12-31"
+      onchange="onNoteDateInput(this.value)" aria-label="Chọn ngày cho ghi chú">
+    <textarea id="dayNote" data-date="${iso}" rows="3" maxlength="2000" placeholder="Ghi chú cho ngày này (lưu trên thiết bị của bạn)…"
+      oninput="onNoteInput()" aria-label="Ghi chú ngày ${iso}">${esc(text)}</textarea>
+    <div class="note-actions">
+      <button type="button" class="mini-btn" onclick="clearDayNote()">Xoá</button>
+      <button type="button" class="mini-btn accent" onclick="saveDayNote()">Lưu</button>
+    </div>
   </div>`;
+}
+function onNoteDateInput(value){
+  if(!parseISO(value)) return;
+  saveDayNote(); // lưu ghi chú của ngày đang sửa trước khi chuyển ngày
+  noteEditDate=value;
+  renderApp();
+}
+function editNote(key){
+  if(!parseISO(key)) return;
+  noteEditDate=key;
+  renderApp();
+  try{ window.scrollTo({top:0,behavior:"smooth"}); }catch(e){ window.scrollTo(0,0); }
 }
 let noteTimer=null;
 function onNoteInput(){
@@ -790,7 +789,9 @@ function saveDayNote(){
   if(noteTimer){ clearTimeout(noteTimer); noteTimer=null; }
   const ta=document.getElementById("dayNote");
   if(!ta) return;
-  setNote(selDate.d,selDate.m,selDate.y,ta.value);
+  const p=parseISO(ta.dataset.date);
+  if(!p) return;
+  setNote(p.d,p.m,p.y,ta.value);
   const status=document.getElementById("noteStatus");
   if(status) status.textContent=ta.value.trim()?"Đã lưu ✓":"Đã xoá";
 }
@@ -799,19 +800,11 @@ function clearDayNote(){
   if(!ta) return;
   if(ta.value.trim() && !confirm("Xoá ghi chú của ngày này?")) return;
   ta.value="";
-  setNote(selDate.d,selDate.m,selDate.y,"");
+  const p=parseISO(ta.dataset.date);
+  if(!p) return;
+  setNote(p.d,p.m,p.y,"");
   const status=document.getElementById("noteStatus");
   if(status) status.textContent="Đã xoá";
-}
-function submitDayEvent(e){
-  e.preventDefault();
-  const title=document.getElementById("evTitle"), time=document.getElementById("evTime");
-  const repeat=document.getElementById("evRepeat"), errEl=document.getElementById("evErr");
-  if(document.getElementById("dayNote")) saveDayNote(); // giữ ghi chú đang gõ trước khi render lại
-  const res=addEvent(selDate.d,selDate.m,selDate.y,title?title.value:"",time?time.value:"",repeat?repeat.value:"none");
-  if(!res.ok){ if(errEl) errEl.textContent=res.error; return false; }
-  renderApp();
-  return false;
 }
 function deleteEvent(id){
   if(!confirm("Xoá sự kiện này?")) return;
@@ -990,14 +983,15 @@ function renderHolidays(){
   </div>`;
 }
 
-const APP_VERSION="1.3.0";
+const APP_VERSION="1.4.0";
 function renderNotes(){
   const t=todayVN();
   const upcoming=upcomingEvents(t,30);
   const noteKeys=Object.keys(notes).sort().reverse();
   const allEvents=events.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.time||"").localeCompare(String(b.time||"")));
   const fmtDMY=iso=>{const p=parseISO(iso);return p?`${pad2(p.d)}/${pad2(p.m)}/${p.y}`:iso;};
-  return `<div class="card">
+  return `${renderNoteEditor()}
+  <div class="card">
     <h3 style="margin-top:0;">🎉 Sự kiện sắp tới (30 ngày)</h3>
     <div class="ev-list">${upcoming.length?upcoming.map(x=>`<div class="ev-item">
       <span class="ev-time">${pad2(x.d)}/${pad2(x.m)}</span>
@@ -1021,7 +1015,7 @@ function renderNotes(){
       </div>
       <div class="err" id="qevErr"></div>
     </form>
-    <div class="note">Sự kiện lưu trên thiết bị này và hiển thị trong ngày, lịch tháng và Widget (nếu trình duyệt hỗ trợ).</div>
+    <div class="note">Sự kiện lưu trên thiết bị này và hiển thị trên lịch tháng và Widget (nếu trình duyệt hỗ trợ).</div>
   </div>
   <div class="card">
     <h3 style="margin-top:0;">📝 Ghi chú đã lưu</h3>
@@ -1030,13 +1024,13 @@ function renderNotes(){
       const text=notes[k];
       return `<div class="ev-item">
         <span class="ev-time">${pad2(p.d)}/${pad2(p.m)}</span>
-        <button type="button" class="note-open" onclick="openDay(${p.d},${p.m},${p.y})">
+        <button type="button" class="note-open" onclick="editNote('${k}')">
           <b>${pad2(p.d)}/${pad2(p.m)}/${p.y}</b>
           <span class="note-snippet">${esc(text.length>140?text.slice(0,140)+"…":text)}</span>
         </button>
         <button type="button" class="ev-del" onclick="deleteNote('${k}')" aria-label="Xoá ghi chú" title="Xoá ghi chú">🗑</button>
       </div>`;
-    }).join(""):'<div class="ev-empty">Chưa có ghi chú. Mở một ngày để thêm ghi chú.</div>'}</div>
+    }).join(""):'<div class="ev-empty">Chưa có ghi chú. Chọn ngày và nhập ở khung phía trên.</div>'}</div>
   </div>
   <div class="card">
     <h3 style="margin-top:0;">📋 Tất cả sự kiện</h3>
@@ -1318,6 +1312,7 @@ function renderAbout(){
 }
 
 function renderApp(){
+  if(noteTimer) saveDayNote(); // lưu ghi chú đang gõ trước khi render lại
   const widgetActive=view==="widget"&&WIDGET_SUPPORTED;
   document.body.classList.toggle("widget-mode", widgetActive&&widgetStandalone);
   document.querySelectorAll('#navMenu button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));

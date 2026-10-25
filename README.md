@@ -72,8 +72,8 @@ Nhờ đó có thể lưu, chia sẻ hoặc mở lại đúng ngày; khi chuyể
 
 ## 📝 Ghi chú, sự kiện và Widget
 
-- **Ghi chú**: mở một ngày bất kỳ, nhập vào ô “Ghi chú ngày…” và bấm Lưu (hoặc để tự lưu sau khi ngừng gõ). Ghi chú được đánh dấu bằng chấm đỏ nhỏ trên lịch tháng và liệt kê trong tab **Ghi chú & sự kiện**.
-- **Sự kiện**: thêm ngay trong trang ngày hoặc trong tab **Ghi chú & sự kiện**, có thể kèm giờ và chọn lặp:
+- **Ghi chú**: mở tab **Ghi chú & sự kiện**, chọn ngày ở ô ngày rồi nhập vào ô ghi chú và bấm Lưu (hoặc để tự lưu sau khi ngừng gõ). Ghi chú được đánh dấu bằng chấm đỏ nhỏ trên lịch tháng và liệt kê trong tab **Ghi chú & sự kiện**.
+- **Sự kiện**: thêm trong tab **Ghi chú & sự kiện**, có thể kèm giờ và chọn lặp:
   - Không lặp,
   - Hằng năm theo dương lịch,
   - Hằng năm theo âm lịch (dùng ngày/tháng âm của ngày tạo).
